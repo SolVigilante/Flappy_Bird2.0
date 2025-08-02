@@ -35,7 +35,22 @@ int init_screen(SDL_Window** window, SDL_Renderer** renderer) {
 
 }
 // Function to clean up SDL resources
-void kill_SDL (SDL_Window** window, SDL_Renderer** renderer) {
+void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player, SDL_Texture * background_texture) {
+    //Quits sdl image resources
+    SDL_DestroyTexture(background_texture);
+    SDL_DestroyTexture(bird->bird_texture);
+    for(int i = 0; i<NUM_PIPES; i++){
+        SDL_DestroyTexture((pipe+i)->up_pipe_texture);
+        SDL_DestroyTexture((pipe+i)->down_pipe_texture);
+    }
+    SDL_DestroyTexture(player->lives_texture);
+
+    SDL_DestroyTexture(player->score_text_texture);
+    //Quis sdl ttf resources
+    TTF_CloseFont(player->score_font);
+    TTF_Quit();
+
+    IMG_Quit();
     //Destroys window and renderer
     SDL_DestroyRenderer(*renderer);
     SDL_DestroyWindow(*window);
@@ -47,4 +62,28 @@ long long current_time_ms(void) {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return (long long)(tv.tv_sec) * 1000 + (tv.tv_usec / 1000);
+}
+void render_text_simple(SDL_Renderer* renderer, TTF_Font* font, const char* texto, int x, int y, SDL_Color color) {
+    // Creates the text surface
+    SDL_Surface* surface = TTF_RenderText_Blended(font, texto, color);
+    if (!surface) {
+        printf("Error renderizing text: %s\n", TTF_GetError());
+        return;
+    }
+
+    // Creates the text textture
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        printf("Error creating text texture: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface);
+        return;
+    }
+
+    // Text position and size
+    SDL_Rect dest = { x, y, surface->w, surface->h };
+    SDL_RenderCopy(renderer, texture, NULL, &dest);
+
+    // Cleanes the resources
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
 }

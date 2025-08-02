@@ -3,16 +3,19 @@
 #include <stdlib.h>
 #include "pipes.h"
 #include "screen.h"
+static void move_pipe (pipe_t *pipe, int pipes_left);
 
 //Frontend
-void init_pipes (pipe_t * pipe, int pos){
-    pipe->position = pos; //It where pos is
-    pipe->gap_height = rand() % (SCREEN_HEIGHT - PIPES_GAP + 1) + 1; // New random gap
+void init_pipes ( pipe_t * pipe, int pos){
+        pipe->collided = false; //turn on the flag
+        pipe->has_passed = false; //turn on the flag
+        pipe->position = pos; //It where pos is
+        pipe->gap_height = rand() % (SCREEN_HEIGHT - PIPES_GAP + 1) + 1; // New random heiht
 }
 
 void draw_pipes(SDL_Renderer ** renderer, pipe_t * pipe){
-    SDL_Rect down_pipe_shape = { pipe->position, SCREEN_HEIGHT - pipe->gap_height , PIPES_WIDTH, pipe->gap_height}; 
-    SDL_Rect up_pipe_shape = { pipe->position, 0, PIPES_WIDTH, SCREEN_HEIGHT - pipe->gap_height - PIPES_GAP}; 
+    SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, PIPES_WIDTH, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
+    SDL_Rect up_pipe_shape = { pipe->position, 0, PIPES_WIDTH, pipe->gap_height}; 
     // Draw the bird as a rectangle
     SDL_SetRenderDrawColor(*renderer, 255, 255, 0, 255); // color amarillo
     SDL_RenderCopy(*renderer, pipe->up_pipe_texture, NULL, &up_pipe_shape);
@@ -20,7 +23,6 @@ void draw_pipes(SDL_Renderer ** renderer, pipe_t * pipe){
 }
 
 //Backend
-static void move_pipe (pipe_t *pipe, int pipes_left);
 // Main loop
 void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe) {
         int i;

@@ -11,15 +11,16 @@ static void flying_physics(bird_t * bird);
 //Frontend
 
 //Initializes the bird
-void init_bird(bird_t * bird){
-    int max_x = SCREEN_WIDTH;
-    int max_y = SCREEN_HEIGHT;
-    bird->bird_height = 100;
-    bird->bird_width = 200;
-    bird->bird_x = max_x / 5; // The burd will be at 1/5 of the screen
-    bird->bird_y = max_y / 2; // The bird will be at the middle of the screen
+void init_bird(SDL_Renderer ** renderer, bird_t * bird){
+    bird->bird_height = BIRD_HEIGHT;
+    bird->bird_width = BIRD_WIDTH;
+    bird->bird_x = SCREEN_WIDTH / 5; // The burd will be at 1/5 of the screen
+    bird->bird_y = SCREEN_HEIGHT / 2; // The bird will be at the middle of the screen
     bird->velocity = 0.0f; // Initial velocity
     bird->acceleration = GRAVITY; // Gravity acceleration   
+    bird->floor_collision = false;
+    bird->bird_texture= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
+    SDL_SetTextureBlendMode(bird->bird_texture, SDL_BLENDMODE_BLEND); //enables transparecy
 }
 
 //Render the texture of the bird
