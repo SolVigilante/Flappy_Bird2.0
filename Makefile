@@ -22,7 +22,7 @@ screen.o: screen.c screen.h
 logic.o: logic.c logic.h bird.h pipes.h screen.h player.h
 	${CC} ${CFLAGS} logic.c 
 
-player.o: player.c player.h
+player.o: player.c player.h screen.h
 	${CC} ${CFLAGS} player.c
 
 clean:

@@ -28,8 +28,7 @@ void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
 
     SDL_Rect bird_shape = { bird->bird_x, bird->bird_y, bird->bird_width, bird->bird_height }; // fixed size 200x100
     // Draw the bird as a rectangle
-    SDL_SetRenderDrawColor(*renderer, 255, 255, 0, 255); // color amarillo
-    SDL_RenderCopy(*renderer, bird->bird_texture, NULL, &bird_shape);
+    SDL_RenderCopyEx(*renderer, bird->bird_texture, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
 
 }
 

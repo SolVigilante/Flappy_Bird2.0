@@ -10,6 +10,7 @@ typedef struct {
     int lives;
     SDL_Texture * lives_texture;
     TTF_Font* score_font;
+    TTF_Font* letters_font;
     SDL_Texture* score_text_texture;
     int score;
 }player_t;

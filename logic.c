@@ -2,6 +2,7 @@
 #include "bird.h"
 #include "pipes.h"
 #include "screen.h"
+#include "logic.h"
 #include "player.h"
 
 
@@ -44,11 +45,11 @@ bool has_passed(bird_t * bird, pipe_t * pipe){
 }
 
 //Initialize all the structures
-void game_set(bird_t*bird , pipe_t* pipe, player_t * player, SDL_Renderer ** renderer){
+void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * letter, int difficulty,  SDL_Renderer ** renderer){
     static int i;
     init_player(renderer, player);
     for (i=NUM_PIPES; i>0; i--){
-        init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH));
+        init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH), difficulty, false);
     }
     for(i=0; i<NUM_PIPES; i++){
                 //Initialize the top pipe image
@@ -58,5 +59,5 @@ void game_set(bird_t*bird , pipe_t* pipe, player_t * player, SDL_Renderer ** ren
                 (pipe+i)->down_pipe_texture= IMG_LoadTexture(*renderer, "image/down_pipe.png");
         }
     init_bird(renderer, bird);
+    init_letter_texture(letter, renderer);
 }
-
