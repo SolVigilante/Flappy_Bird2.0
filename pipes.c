@@ -11,7 +11,7 @@ void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
         switch (update){
                 case false: //If the pipe is being updated
                         if(difficulty == MEDIUM){
-                                pipe->d_pipe = rand() % 7 == 0; // ~15% chance of being dynamic
+                                pipe->d_pipe = rand() % 4 == 0; // 25% chance of being dynamic
                                 pipe->speed = 2; // Speed of the pipe
                         }else if (difficulty == HARD){
                                 pipe->d_pipe = rand() % 2 == 0; // 50% chance of being dynamic
@@ -22,19 +22,20 @@ void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
 
                         }
                 case true: //If the pipe is being initialized
-                        pipe->collided = false; //turn on the flag
                         pipe->has_passed = false; //turn off the flag
                         pipe->bounced = false; //turn off the flag
+                        pipe->bounce_width=false; //turn off the flag
                         pipe->position = pos; //It where pos is
-                        pipe->gap_height = rand() % (SCREEN_HEIGHT - PIPES_GAP + 1) + 1; // New random heiht
+                        pipe->width = PIPES_WIDTH; //The width is always the same
+                        pipe->gap_height = rand() % (SCREEN_HEIGHT - PIPES_GAP + 1) + 1; // New random height
                         break; 
         }
 }
 
 
 void draw_pipes(SDL_Renderer ** renderer, pipe_t * pipe){
-    SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, PIPES_WIDTH, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
-    SDL_Rect up_pipe_shape = { pipe->position, 0, PIPES_WIDTH, pipe->gap_height}; 
+    SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
+    SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; 
     // Draw the bird as a rectangle
     SDL_RenderCopy(*renderer, pipe->up_pipe_texture, NULL, &up_pipe_shape);
     SDL_RenderCopy(*renderer, pipe->down_pipe_texture, NULL, &down_pipe_shape);
@@ -53,13 +54,25 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
                         }else if((pipe+i)-> bounced == true){
                                 (pipe+i)-> gap_height -= 1; // Randomly change the gap height
                         }
-
-                        if((pipe+i)-> gap_height <= SCREEN_HEIGHT/4){
-                                (pipe+i)-> bounced = false; //Sets the flag to false
-                        }else if( (pipe+i)-> gap_height >= (SCREEN_HEIGHT - PIPES_GAP)/2){ //If the gap is too low
-                                (pipe+i)-> bounced = true; //Sets the flag to true
+                        //Bouncing logic
+                        if((pipe+i)-> gap_height <= 0){//If the gap is too high
+                                (pipe+i)-> bounced = false; //Sets the flag to false and tthe pipe moves down
+                        }else if( (pipe+i)-> gap_height >= (SCREEN_HEIGHT - PIPES_GAP)){ //If the gap is too low
+                                (pipe+i)-> bounced = true; //Sets the flag to true and he pipe moves up
                         }
-                                
+                        //Variable Width logic
+                        
+                        if(((pipe+i)-> bounce_width == false)){ //If the gap is too high
+                                (pipe+i)-> width += 1; // Randomly change the gap height
+                        }else if((pipe+i)-> bounce_width == true){
+                                (pipe+i)-> width -= 1; // Randomly change the gap height
+                        }
+                        //Bouncing logic
+                        if((pipe+i)-> width <= MIN_PIPES_WIDTH){//If the gap is too high
+                                (pipe+i)-> bounce_width = false; //Sets the flag to false and tthe pipe moves down
+                        }else if( (pipe+i)-> width >= MAX_PIPES_WIDTH){ //If the gap is too low
+                                (pipe+i)-> bounce_width = true; //Sets the flag to true and he pipe moves up
+                        }
                 }
 
         }
@@ -67,9 +80,9 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
 //Moves pipe
 static void move_pipe (pipe_t *pipe, int pipes_left, int difficulty) {
         pipe->position -= pipe->speed; // Move pipe one column to the left
-        if(pipe->position < -PIPES_WIDTH){
+        if(pipe->position < -pipe->width){ //If the pipe is out of the screen
                 if(pipes_left == NUM_PIPES-1){
-                        init_pipes(pipe, (pipe+pipes_left)->position + GAP_PWP+PIPES_WIDTH, difficulty, true); //If it is the last pipe, it will be initialized with a new position
+                        init_pipes(pipe, (pipe+pipes_left)->position + GAP_PWP + PIPES_WIDTH, difficulty, true); //If it is the last pipe, it will be initialized with a new position
                 }else{
                         init_pipes(pipe, (pipe+pipes_left)->position + (NUM_PIPES - pipes_left)*(GAP_PWP + PIPES_WIDTH), difficulty, true);
                 }

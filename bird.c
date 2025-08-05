@@ -1,6 +1,8 @@
 #include "bird.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <stdint.h>
+#include <math.h>
 #include "screen.h"
 
 
@@ -14,19 +16,27 @@ static void flying_physics(bird_t * bird);
 void init_bird(SDL_Renderer ** renderer, bird_t * bird){
     bird->bird_height = BIRD_HEIGHT;
     bird->bird_width = BIRD_WIDTH;
-    bird->bird_x = SCREEN_WIDTH / 5; // The burd will be at 1/5 of the screen
-    bird->bird_y = SCREEN_HEIGHT / 2; // The bird will be at the middle of the screen
+    bird->bird_x = SCREEN_WIDTH / 5; // The bird will be at 1/5 of the screen
+    bird->bird_y = rand() % (SCREEN_HEIGHT - BIRD_HEIGHT); // The bird will appearr at a random height
     bird->velocity = 0.0f; // Initial velocity
     bird->acceleration = GRAVITY; // Gravity acceleration   
-    bird->floor_collision = false;
+    bird->collided = false;
     bird->bird_texture= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
     SDL_SetTextureBlendMode(bird->bird_texture, SDL_BLENDMODE_BLEND); //enables transparecy
 }
 
 //Render the texture of the bird
 void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
-
+    int alpha; // Alpha value for transparency
+    float time = (float)(current_time_ms() % 1000) / 1000.0f; // Time in seconds for the sine wave
     SDL_Rect bird_shape = { bird->bird_x, bird->bird_y, bird->bird_width, bird->bird_height }; // fixed size 200x100
+    if(bird->collided){ //If the bird has collided with a pipe
+        alpha = (int)(127.5f * (1.0f + sinf(2 * M_PI * time))); // sin between 0 y 255
+
+    }else{
+        alpha = 255; // If the bird has not collided, it is fully opaque
+    }
+    SDL_SetTextureAlphaMod(bird->bird_texture, alpha);
     // Draw the bird as a rectangle
     SDL_RenderCopyEx(*renderer, bird->bird_texture, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
 

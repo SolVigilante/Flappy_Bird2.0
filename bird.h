@@ -12,7 +12,8 @@ typedef struct{
     SDL_Texture* bird_texture; //Image for the bird texture
     int bird_height; 
     int bird_width;
-    bool floor_collision; //Fla to know whether the bird has collided with the flor recently
+    bool floor_collision; //Flag to know whether the bird has collided with the floor
+    bool collided; //Flag to know whether the bird has collided
     int bird_x; //X position of the bird
     int bird_y; //Y position of the bird
     float velocity; //Velocitty of the bird

@@ -2,7 +2,7 @@
 
 CC := gcc
 CFLAGS := -c -Wall -I.
-LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf
+LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
 Flappy_Bird: main.o bird.o pipes.o screen.o logic.o player.o
 	${CC} $^ -o Flappy_Bird ${LDFLAGS}
@@ -16,7 +16,7 @@ bird.o: bird.c bird.h screen.h
 pipes.o: pipes.c pipes.h screen.h
 	${CC} ${CFLAGS} pipes.c 
 
-screen.o: screen.c screen.h 
+screen.o: screen.c screen.h player.h pipes.h bird.h
 	${CC} ${CFLAGS} screen.c 
 
 logic.o: logic.c logic.h bird.h pipes.h screen.h player.h

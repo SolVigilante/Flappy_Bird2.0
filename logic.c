@@ -8,11 +8,9 @@
 
 //Function that returns true if the bird has collided with he pipe or false if it hasnt
 bool has_collide(bird_t* bird, pipe_t* pipe) {
-
-    if (pipe->collided) { //If the bird has already collided wit the pipe it doesnt count
+    if(bird->collided){ //If the bird has alredy collided that pipe the score shouldn't increment
         return false;
     }else if((bird->bird_y == SCREEN_HEIGHT- BIRD_HEIGHT )&& !bird->floor_collision){ //If the bird is on the groundS
-        bird->floor_collision = true;
         return true;
     }else{
         // Verifies the bird is in the horizontal range

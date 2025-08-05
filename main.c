@@ -61,6 +61,7 @@ int main() {
     SDL_Event event;
     bool inc_flag = false; //Flag to know if the speed has been increased
     long long last_increment_time= -5001; //Last time the speed was increased, initialized to a negative value so the first increment cant happen immediately
+    long long last_collision_time; //Last time the bird collided, initialized to a negative value so the first increment cant happen immediately
     bool choose_difficulty = false; //Flag to know if the user has chosen a difficulty
     bool has_started = false; //Flag to know if the game has started
     int difficulty= -1; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
@@ -144,8 +145,12 @@ int main() {
             draw_score(&renderer, &player);
             
             now = current_time_ms();
-            if((now - last_increment_time <= 5000) ){ //Speed up messsage stays on screen for 5 seconds
+            if((now - last_increment_time <= 5000) && inc_flag){ //Speed up messsage stays on screen for 5 seconds
                 render_centered_image(letter.speed_up_texture, 72, 314, &renderer); //360x100 gameover image
+            }
+    
+            if((now - last_collision_time >= 3000) && bird.collided){ //Speed up messsage stays on screen for 5 seconds
+                bird.collided = false; //Resets the collision flag after 5 seconds
             }
 
             // Draw bird
@@ -159,9 +164,10 @@ int main() {
 
             for(int i=0; i<NUM_PIPES; i++){
                 if(has_collide(&bird, pipe+i)){
-                    (pipe+i)->collided= true;
+                    bird.collided= true;
                     player.lives--;
                     update_lives(&renderer, &player);
+                    last_collision_time = current_time_ms(); //Updates the time of the last collision
                 }
                 if(has_passed(&bird, pipe+i)){
                     player.score++;
