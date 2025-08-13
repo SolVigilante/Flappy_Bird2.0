@@ -12,7 +12,11 @@
 #include "bird.h"
 #include "logic.h"
 #include "player.h"
+#include "constants.h"
 
+static void collision_logic(pipe_t* pipe, bird_t* bird, player_t* player, bool *inc_flag, SDL_Renderer** renderer    );
+static void speed_up_logic(pipe_t* pipe, player_t* player, bool *inc_flag, letter_texture_t* letter, SDL_Renderer** renderer);
+static void update_bird(bird_t* bird, player_t* player);
 
 int main() {
     //initialize random
@@ -44,9 +48,6 @@ int main() {
     //initialize the game
     //game_set(&bird, pipe, &player, &letter, HARD, &renderer);
 
-    //initialize the time variable
-    long long last_gravity_time = current_time_ms(); //stores the initial time in milliseconds
-    long long now;
 
     //Initialize the background image
     SDL_Texture* background_texture = IMG_LoadTexture(renderer, "image/background.jpg");
@@ -54,19 +55,15 @@ int main() {
 
     
     //Main loop
+    SDL_Event event; //Event variable
     bool running = true; //break flag
-    bool space_pressed = false; //Space flag, for key control
-    bool first_key = false; //Flag o now if the fist key has been pressed
-    bool gameover = false;
-    SDL_Event event;
     bool inc_flag = false; //Flag to know if the speed has been increased
-    long long last_increment_time= -5001; //Last time the speed was increased, initialized to a negative value so the first increment cant happen immediately
-    long long last_collision_time; //Last time the bird collided, initialized to a negative value so the first increment cant happen immediately
-    bool choose_difficulty = false; //Flag to know if the user has chosen a difficulty
     bool has_started = false; //Flag to know if the game has started
-    int difficulty= -1; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
+    int difficulty = START_DIFFICULTY; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
     
     init_letter_texture(&letter, &renderer); //Initializes the letter texture
+    init_player(&renderer, &player); //Initializes the player
+
     while(running) {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -79,41 +76,37 @@ int main() {
                         running = false;
                     }
 
-                    if (event.key.keysym.sym == SDLK_SPACE && !space_pressed && !gameover && choose_difficulty) { // if space is pressed and not already pressed
-                        switch (first_key){ //To know if the game can start 
-                            case false:
-                                first_key= true;
-                            case true:
+                    if (event.key.keysym.sym == SDLK_SPACE && !bird.space_pressed && (player.status == PLAYING || player.status == FIRST_KEY)) { // if space is pressed and not already pressed
+                        switch (player.status){ //To know if the game can start 
+                            case FIRST_KEY:
+                                player.status = PLAYING; //Changes the status to playing
+                            case PLAYING:
                                 game_start(FLYING_BIRD, &bird); //updates birds physics for flying
-                                space_pressed = true; 
+                                bird.space_pressed = true; 
                                 break;
                         }
                     }
-                    if(!choose_difficulty && event.key.keysym.sym == SDLK_1){
+                    if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_1){
                         difficulty = EASY; //Sets the difficulty to easy
                     }
-                    if(!choose_difficulty && event.key.keysym.sym == SDLK_2){
+                    else if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_2){
                         difficulty = MEDIUM; //Sets the difficulty to medium
                     }
-                    if(!choose_difficulty && event.key.keysym.sym == SDLK_3){
+                    else if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_3){
                         difficulty = HARD; //Sets the difficulty to hard
                     }
     
 
                     // waits for r key to reset the game
-                    if (gameover && event.key.keysym.sym == SDLK_r) {
-                        game_set(&bird, pipe, &player, &letter, difficulty, &renderer); // reset
-                        first_key= false; //Waits for the user to press space
-                        last_increment_time= -5001; //Last time the speed was increased, initialized to a negative value so the first increment cant happen immediately
-                        gameover = false; 
-                        choose_difficulty = false; //Resets the choose difficulty flag
-                        difficulty= -1; //Resets the difficulty variable
+                    if (player.status==GAMEOVER && event.key.keysym.sym == SDLK_r) {
+                        init_player(&renderer, &player); //Reinitializes the player
+                        difficulty = START_DIFFICULTY;
                     }
                     break;
                 case SDL_KEYUP:
-                    if(choose_difficulty){ // prevents the user from pressing space to start the game before choosing a difficulty
+                    if(player.status != CHOOSING_DIFFICULTY){ // prevents the user from pressing space to start the game before choosing a difficulty
                         if (event.key.keysym.sym == SDLK_SPACE) {
-                            space_pressed = false; //RELEASES THE SPACE KEY
+                            bird.space_pressed = false; //RELEASES THE SPACE KEY
                         }
                          bird.floor_collision=false;
                     }
@@ -131,71 +124,40 @@ int main() {
         SDL_RenderCopy(renderer, background_texture, NULL, NULL);
 
 
-        if(!gameover && choose_difficulty){ //If the game is not over and the user has chosen a difficulty
-            if(!first_key){
+        if(player.status == PLAYING || player.status==FIRST_KEY){ //If the game is not over and the user has chosen a difficulty
+            if(player.status==FIRST_KEY){
                 render_centered_image(letter.start_texture, 76, 750, &renderer); //750x76 start image
             }
-            //Moves the pipes and draws them
+            
             pipes_movement(&renderer, pipe, HARD);
 
-            //Draws the hearts
+            
             draw_lives(&renderer, &player);
             
-            //Draws the score text
-            draw_score(&renderer, &player);
             
-            now = current_time_ms();
-            if((now - last_increment_time <= 5000) && inc_flag){ //Speed up messsage stays on screen for 5 seconds
-                render_centered_image(letter.speed_up_texture, 72, 314, &renderer); //360x100 gameover image
-            }
+            draw_score(&renderer, &player);
     
-            if((now - last_collision_time >= 3000) && bird.collided){ //Speed up messsage stays on screen for 5 seconds
-                bird.collided = false; //Resets the collision flag after 5 seconds
-            }
+            update_bird(&bird, &player); //Updates the bird's physics
 
-            // Draw bird
+            
             draw_bird(&renderer, &bird);
 
-
-            if(( now - last_gravity_time >= 100) && first_key) { // Every 50ms, we update the bird's physics only if the firstt key has been pressed
-                game_start(FALLING_BIRD, &bird); // Starts the game loop
-                last_gravity_time = now;  // Updates the last time gravity was applied
-            }
-
-            for(int i=0; i<NUM_PIPES; i++){
-                if(has_collide(&bird, pipe+i)){
-                    bird.collided= true;
-                    player.lives--;
-                    update_lives(&renderer, &player);
-                    last_collision_time = current_time_ms(); //Updates the time of the last collision
-                }
-                if(has_passed(&bird, pipe+i)){
-                    player.score++;
-                    (pipe+i)->has_passed= true;
-                    inc_flag = false; //Resets the flag so the speed can be increased again
-                }
-            }
+            collision_logic(pipe, &bird, &player, &inc_flag, &renderer); //Checks for collisions and updates the score
+            
+            speed_up_logic(pipe, &player, &inc_flag, &letter, &renderer); //Increases the speed of the pipes every 5 points
             
             if(player.lives <= 0){
-                gameover=true;
+                player.status = GAMEOVER; //If the player has no lives left, the game is over
             }
-            if((player.score)%5 == 0 && player.score != 0 && pipe->speed < SPEED_LIMIT(HARD) && !inc_flag){ //Increases the speed of the pipes every 5 points and top speed is 10
-                for(int i=0; i<NUM_PIPES; i++){
-                    (pipe+i)->speed++; //Increases the speed of the pipes every 5 frames
-                }
-                inc_flag = true; //Sets the flag so the speed is not increased again
-                last_increment_time = current_time_ms(); //Updates the time of the last increment
-            }
-            SDL_Delay(1); // Evita saturar la CPU innecesariamente
 
-        }else if(gameover){
+        }else if(player.status == GAMEOVER){ //If the game is over
             render_centered_image(letter.gameover_texture, 100, 360, &renderer); //360x100 gameover image
-            // Shows the result
-        }else if(!choose_difficulty){
+    
+        }else if(player.status == CHOOSING_DIFFICULTY){ //If the user is choosing a difficulty
             render_centered_image(letter.choose_difficulty_texture, 200, 700, &renderer); //360x100 gameover image
-            // Shows the result
-            if(difficulty != -1){ //If the user has chosen a difficulty
-                choose_difficulty = true; //Sets the flag to true so the game can start
+            
+            if(difficulty != START_DIFFICULTY){ //If the user has chosen a difficulty
+                player.status = FIRST_KEY; 
                 has_started = true; //Sets the flag to true so the game can start
                 game_set(&bird, pipe, &player, &letter, difficulty, &renderer); //Resets the game with the new difficulty
             }
@@ -213,3 +175,47 @@ int main() {
 
 }
 
+static void collision_logic(pipe_t* pipe, bird_t* bird, player_t* player, bool *inc_flag, SDL_Renderer** renderer) {
+/*FUnctioon that evaluates if here has been a collision or if the score should increase.*/
+    for(int i=0; i<NUM_PIPES; i++){
+                if(has_collide(bird, pipe+i)){
+                    bird->collided= true;
+                    player->lives--;
+                    update_lives(renderer, player);
+                    bird->last_collision_time = current_time_ms(); //Updates the time of the last collision
+                }
+                if(has_passed(bird, pipe+i)){
+                    player->score++;
+                    (pipe+i)->has_passed= true;
+                    *inc_flag = false; //Resets the flag so the speed can be increased again
+                }
+            }
+}
+
+static void speed_up_logic(pipe_t* pipe, player_t* player, bool *inc_flag, letter_texture_t* letter, SDL_Renderer** renderer) {
+/*Function that evaluates if the game should speed up because the player has passed 5 pipes. It also manages
+the logic for graphic part. */
+    if((player->score)%5 == 0 && player->score != 0 && pipe->speed < SPEED_LIMIT(HARD) && !*inc_flag){ //Increases the speed of the pipes every 5 points and top speed is 10
+        for(int i=0; i<NUM_PIPES; i++){
+            (pipe+i)->speed++; //Increases the speed of the pipes every 5 frames
+        }
+        *inc_flag = true; //Sets the flag so the speed is not increased again
+        pipe->last_increment_time = current_time_ms(); //Updates the time of the last increment
+    }
+    long long now = current_time_ms();
+    if((now - pipe->last_increment_time <= 5000) && *inc_flag){ //Speed up messsage stays on screen for 5 seconds
+        render_centered_image(letter->speed_up_texture, 72, 314, renderer); //360x100 gameover image
+    }
+}
+
+static void update_bird(bird_t* bird, player_t* player) {
+/*FFUnction that updates the birds physics.*/
+    long long now = current_time_ms();
+    if((now - bird->last_collision_time >= 3000) && bird->collided){
+        bird->collided = false; //Resets the collision flag after 3 seconds
+    }
+    if((now - bird->last_gravity_time >= 100) && player->status != FIRST_KEY) { // Every 100ms, we update the bird's physics only if the firstt key has been pressed
+        game_start(FALLING_BIRD, bird); // Starts the game loop
+        bird->last_gravity_time = now;  // Updates the last time gravity was applied
+    }
+}

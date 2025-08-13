@@ -7,22 +7,22 @@ LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 Flappy_Bird: main.o bird.o pipes.o screen.o logic.o player.o
 	${CC} $^ -o Flappy_Bird ${LDFLAGS}
 
-main.o: main.c bird.h pipes.h screen.h logic.h player.h
+main.o: main.c bird.h pipes.h screen.h logic.h player.h constants.h
 	${CC} ${CFLAGS} main.c 
 
-bird.o: bird.c bird.h screen.h
+bird.o: bird.c bird.h screen.h constants.h
 	${CC} ${CFLAGS} bird.c 
 
-pipes.o: pipes.c pipes.h screen.h
+pipes.o: pipes.c pipes.h constants.h
 	${CC} ${CFLAGS} pipes.c 
 
-screen.o: screen.c screen.h player.h pipes.h bird.h
+screen.o: screen.c screen.h constants.h
 	${CC} ${CFLAGS} screen.c 
 
-logic.o: logic.c logic.h bird.h pipes.h screen.h player.h
+logic.o: logic.c logic.h bird.h pipes.h screen.h player.h constants.h
 	${CC} ${CFLAGS} logic.c 
 
-player.o: player.c player.h screen.h
+player.o: player.c player.h constants.h
 	${CC} ${CFLAGS} player.c
 
 clean:

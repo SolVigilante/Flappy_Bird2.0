@@ -3,11 +3,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#define HEART_HEIGHT 50
-#define HEART_WIDTH 150
+#include "constants.h"
 
 typedef struct {
+    char username[MAX_USERNAME_LENGTH];
+    int status; 
     int lives;
+    SDL_Texture* username_texture;
     SDL_Texture * lives_texture;
     TTF_Font* score_font;
     TTF_Font* letters_font;

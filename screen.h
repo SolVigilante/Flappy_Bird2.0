@@ -7,8 +7,7 @@
 #include "bird.h"
 #include "pipes.h"
 #include "player.h"
-#define SCREEN_WIDTH 1000 //Width of the screen
-#define SCREEN_HEIGHT 800 //Height of the screen
+
 typedef struct{
     SDL_Texture* start_texture; //Texture for the start screen
     SDL_Texture* gameover_texture; //Texture for the game over screen

@@ -4,16 +4,10 @@
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
 
-#define GAP_PWP 200 //Gap beween pipes
-#define MAX_PIPES_WIDTH 150 //Max width a dynamic pipe can have
-#define MIN_PIPES_WIDTH 80 //Min width a dynamic pipe can have
-#define PIPES_WIDTH 100 //Width of the pipes
-#define PIPES_GAP 250 //size of gap
-#define NUM_PIPES 5 //number of pipes
-
 typedef struct{
     SDL_Texture* up_pipe_texture; //pipe texture
     SDL_Texture* down_pipe_texture; //pipe texture
+    long long last_increment_time; //Last time the speed was increased
     int width; //Width of the pipe
     int position; //X position for the pipe
     int gap_height;  //height of gap

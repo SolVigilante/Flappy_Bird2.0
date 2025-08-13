@@ -1,11 +1,12 @@
 #include "player.h"
-#include "screen.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "constants.h"
 
 //Initializes the lifes but in the future should initialize the playerś name and creates its own file
 void init_player(SDL_Renderer ** renderer, player_t * player){
     player->score=0;
+    player->status = CHOOSING_DIFFICULTY; //Initial status is choosing difficulty
     player->lives=3;
     player->score_font = TTF_OpenFont("fonts/score_font.ttf", 100); // font size 50
     player->lives_texture = IMG_LoadTexture(*renderer, "image/3_lives.png");//Initialize bird image

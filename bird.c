@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdint.h>
 #include <math.h>
+#include "constants.h"
 #include "screen.h"
 
 
@@ -19,7 +20,9 @@ void init_bird(SDL_Renderer ** renderer, bird_t * bird){
     bird->bird_x = SCREEN_WIDTH / 5; // The bird will be at 1/5 of the screen
     bird->bird_y = rand() % (SCREEN_HEIGHT - BIRD_HEIGHT); // The bird will appearr at a random height
     bird->velocity = 0.0f; // Initial velocity
+    bird->last_gravity_time = -5001; //Last time the gravity was applied, initialized to a negative value so the first increment cant happen immediately
     bird->acceleration = GRAVITY; // Gravity acceleration   
+    bird->space_pressed = false; //Space key is not pressed
     bird->collided = false;
     bird->bird_texture= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
     SDL_SetTextureBlendMode(bird->bird_texture, SDL_BLENDMODE_BLEND); //enables transparecy

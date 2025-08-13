@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <sys/time.h>  // gettimeofday
 #include "screen.h"
+#include "constants.h"
 
 //Function to initialize the screen
 //This function will set up the SDL window and renderer

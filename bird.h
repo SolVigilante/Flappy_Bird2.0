@@ -1,10 +1,5 @@
 #ifndef BIRD_H
 #define BIRD_H
-#define GRAVITY 100.0f //Gavity constant
-#define BIRD_WIDTH 50
-#define BIRD_HEIGHT 50
-#define FLYING_BIRD ' ' //Constant that indicates the bird is flying
-#define FALLING_BIRD '0' //constant that indicates the bird is falling
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
@@ -12,6 +7,9 @@ typedef struct{
     SDL_Texture* bird_texture; //Image for the bird texture
     int bird_height; 
     int bird_width;
+    long long last_collision_time; //Last time the bird collided, initialized to a negative value so the first increment cant happen immediately
+    long long last_gravity_time; //Last time the gravity was applied
+    bool space_pressed; //Space flag, for key control
     bool floor_collision; //Flag to know whether the bird has collided with the floor
     bool collided; //Flag to know whether the bird has collided
     int bird_x; //X position of the bird

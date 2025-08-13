@@ -4,6 +4,7 @@
 #include "screen.h"
 #include "logic.h"
 #include "player.h"
+#include "constants.h"
 
 
 //Function that returns true if the bird has collided with he pipe or false if it hasnt
@@ -45,7 +46,6 @@ bool has_passed(bird_t * bird, pipe_t * pipe){
 //Initialize all the structures
 void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * letter, int difficulty,  SDL_Renderer ** renderer){
     static int i;
-    init_player(renderer, player);
     for (i=NUM_PIPES; i>0; i--){
         init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH), difficulty, false);
     }

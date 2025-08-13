@@ -2,8 +2,8 @@
 #include <SDL2/SDL_image.h>
 #include <stdlib.h>
 #include "pipes.h"
-#include "screen.h"
-#include "logic.h"
+#include "constants.h"
+
 static void move_pipe (pipe_t *pipe, int pipes_left, int difficulty);
 
 //Frontend
@@ -22,6 +22,7 @@ void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
 
                         }
                 case true: //If the pipe is being initialized
+                        pipe->last_increment_time = -5001; //Last time the speed was increased, initialized to a negative value so the first increment cant happen immediately
                         pipe->has_passed = false; //turn off the flag
                         pipe->bounced = false; //turn off the flag
                         pipe->bounce_width=false; //turn off the flag
