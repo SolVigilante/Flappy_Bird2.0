@@ -57,5 +57,4 @@ void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * 
                 (pipe+i)->down_pipe_texture= IMG_LoadTexture(*renderer, "image/down_pipe.png");
         }
     init_bird(renderer, bird);
-    init_letter_texture(letter, renderer);
 }

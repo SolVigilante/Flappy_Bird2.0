@@ -12,12 +12,13 @@ typedef struct {
     SDL_Texture* username_texture;
     SDL_Texture * lives_texture;
     TTF_Font* score_font;
-    TTF_Font* letters_font;
+    TTF_Font* username_font;
+    SDL_Texture* enter_username_texture;
     SDL_Texture* score_text_texture;
     int score;
 }player_t;
 
-void init_player(SDL_Renderer ** renderer, player_t * player);
+int init_player(SDL_Renderer ** renderer, player_t * player);
 void update_lives(SDL_Renderer ** renderer, player_t * player);
 void draw_lives(SDL_Renderer ** renderer, player_t * player);
 void draw_score(SDL_Renderer ** renderer, player_t * player);

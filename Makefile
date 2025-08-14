@@ -1,7 +1,7 @@
 #Makefile for Falpy Bird Game
 
 CC := gcc
-CFLAGS := -c -Wall -I.
+CFLAGS := -c -g -Wall -I.
 LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
 Flappy_Bird: main.o bird.o pipes.o screen.o logic.o player.o

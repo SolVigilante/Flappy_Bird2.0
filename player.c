@@ -4,12 +4,32 @@
 #include "constants.h"
 
 //Initializes the lifes but in the future should initialize the playerś name and creates its own file
-void init_player(SDL_Renderer ** renderer, player_t * player){
+int init_player(SDL_Renderer ** renderer, player_t * player){
+    int err = 0; //Error flag
+    //Initialize username font
+    player->username_font = TTF_OpenFont("fonts/username.ttf", 24);
+    if (!player->username_font) {
+        SDL_Log("Failed to load font: %s", TTF_GetError());
+        err = 1;
+    }
+    //Initialize username ttexture
+    player->username_texture = IMG_LoadTexture(*renderer, "image/Enter_Username.png");
+    if (!player->username_texture) {
+        SDL_Log("Failed to load username texture: %s", IMG_GetError());
+        err = 1;
+    }
+
+    if(!err){
+    //Initialize the player
+    player->username[0] = '\0'; //Initialize the username to an empty string
     player->score=0;
-    player->status = CHOOSING_DIFFICULTY; //Initial status is choosing difficulty
+    player->status = CHOOSING_USERNAME; //Initial status is choosing username
     player->lives=3;
     player->score_font = TTF_OpenFont("fonts/score_font.ttf", 100); // font size 50
     player->lives_texture = IMG_LoadTexture(*renderer, "image/3_lives.png");//Initialize bird image
+    }
+    return err;
+    
 }
 
 void update_lives(SDL_Renderer ** renderer, player_t * player){

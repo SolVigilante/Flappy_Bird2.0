@@ -58,11 +58,16 @@ int main() {
     SDL_Event event; //Event variable
     bool running = true; //break flag
     bool inc_flag = false; //Flag to know if the speed has been increased
-    bool has_started = false; //Flag to know if the game has started
+    int game_progress = CLOSE_AT_USERNAME; //Flag to know if the game has started
     int difficulty = START_DIFFICULTY; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
-    
+    char txtinput[MAX_USERNAME_LENGTH]= ""; //Input variable for the user to choose a difficulty
+    bool is_text_input_active = false; //Flag to know if the text input is active
+
     init_letter_texture(&letter, &renderer); //Initializes the letter texture
     init_player(&renderer, &player); //Initializes the player
+
+    SDL_StartTextInput();
+    is_text_input_active = true;
 
     while(running) {
         while (SDL_PollEvent(&event)) {
@@ -72,8 +77,9 @@ int main() {
                     break;
 
                 case SDL_KEYDOWN://if a key is pressed
-                    if (event.key.keysym.sym == SDLK_q){ //if case q is pressed it closes the game
+                    if (event.key.keysym.sym == SDLK_ESCAPE){ //if case q is pressed it closes the game
                         running = false;
+                        break;
                     }
 
                     if (event.key.keysym.sym == SDLK_SPACE && !bird.space_pressed && (player.status == PLAYING || player.status == FIRST_KEY)) { // if space is pressed and not already pressed
@@ -102,6 +108,16 @@ int main() {
                         init_player(&renderer, &player); //Reinitializes the player
                         difficulty = START_DIFFICULTY;
                     }
+
+                    if(player.status == CHOOSING_USERNAME){
+                        if(event.key.keysym.sym == SDLK_BACKSPACE && strlen(txtinput) > 0) { //If backspace is pressed and the input is not empty
+                            txtinput[strlen(txtinput) - 1] = '\0'; //Removes the last character from the input
+                        }else if(event.key.keysym.sym == SDLK_RETURN) { //If enter is pressed
+                            player.status = CHOOSING_DIFFICULTY; //Changes the status to choosing difficulty
+                            game_progress = CLOSE_AT_CHOOSE_DIFFICULTY; //Changes the game progress to choosing difficulty
+                            strncpy(player.username, txtinput, MAX_USERNAME_LENGTH - 1);
+                        }
+                    }
                     break;
                 case SDL_KEYUP:
                     if(player.status != CHOOSING_DIFFICULTY){ // prevents the user from pressing space to start the game before choosing a difficulty
@@ -111,66 +127,89 @@ int main() {
                          bird.floor_collision=false;
                     }
                     break;
-            }
-        } 
-        //Render the current frame
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black
-        SDL_RenderClear(renderer);
-
-        //Draw Background
-        SDL_RenderCopy(renderer, background_texture, NULL, NULL);
+                case SDL_TEXTINPUT:
+                    if (player.status == CHOOSING_USERNAME && is_text_input_active) {
+                        size_t len = strlen(txtinput);
+                        size_t remaining = MAX_USERNAME_LENGTH - len - 1; // -1 for the null terminator
+                        if (remaining > 0) {
+                            strncat(txtinput, event.text.text, remaining);
+                        }
+                    }
+                    break;
+                }
+        }
+        if(running == false){
+            break; //If the user closes the window, the game stops
+        }else if(running == true){
+            //Render the current frame
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black
+            SDL_RenderClear(renderer);
 
             //Draw Background
-        SDL_RenderCopy(renderer, background_texture, NULL, NULL);
+            SDL_RenderCopy(renderer, background_texture, NULL, NULL);
 
+                //Draw Background
+            SDL_RenderCopy(renderer, background_texture, NULL, NULL);
 
-        if(player.status == PLAYING || player.status==FIRST_KEY){ //If the game is not over and the user has chosen a difficulty
-            if(player.status==FIRST_KEY){
-                render_centered_image(letter.start_texture, 76, 750, &renderer); //750x76 start image
-            }
-            
-            pipes_movement(&renderer, pipe, HARD);
-
-            
-            draw_lives(&renderer, &player);
-            
-            
-            draw_score(&renderer, &player);
-    
-            update_bird(&bird, &player); //Updates the bird's physics
-
-            
-            draw_bird(&renderer, &bird);
-
-            collision_logic(pipe, &bird, &player, &inc_flag, &renderer); //Checks for collisions and updates the score
-            
-            speed_up_logic(pipe, &player, &inc_flag, &letter, &renderer); //Increases the speed of the pipes every 5 points
-            
-            if(player.lives <= 0){
-                player.status = GAMEOVER; //If the player has no lives left, the game is over
+           
+             if(player.status == CHOOSING_USERNAME && is_text_input_active){ //If the user is choosing a username
+                SDL_Color color = {255, 255, 255, 255}; //White color for the text
+                render_centered_image(player.username_texture, 61, 536, &renderer); //750x76 start image
+                if(strlen(txtinput)>0 && is_text_input_active){ //If the user has entered a username and the text input is active
+                    renderTextCentered(&renderer, player.username_font, txtinput, color); //Renders the text input in the center of the screen
+                }
+                
             }
 
-        }else if(player.status == GAMEOVER){ //If the game is over
-            render_centered_image(letter.gameover_texture, 100, 360, &renderer); //360x100 gameover image
-    
-        }else if(player.status == CHOOSING_DIFFICULTY){ //If the user is choosing a difficulty
-            render_centered_image(letter.choose_difficulty_texture, 200, 700, &renderer); //360x100 gameover image
-            
-            if(difficulty != START_DIFFICULTY){ //If the user has chosen a difficulty
-                player.status = FIRST_KEY; 
-                has_started = true; //Sets the flag to true so the game can start
-                game_set(&bird, pipe, &player, &letter, difficulty, &renderer); //Resets the game with the new difficulty
-            }
-        }
-        // Shows the result
-        SDL_RenderPresent(renderer);
+            if(player.status == PLAYING || player.status==FIRST_KEY){ //If the game is not over and the user has chosen a difficulty
+                if(player.status==FIRST_KEY){
+                    render_centered_image(letter.start_texture, 76, 750, &renderer); //750x76 start image
+                }
+                
+                pipes_movement(&renderer, pipe, HARD);
+
+                
+                draw_lives(&renderer, &player);
+                
+                
+                draw_score(&renderer, &player);
         
-        SDL_Delay(16); //60 FFPS   
+                update_bird(&bird, &player); //Updates the bird's physics
+
+                
+                draw_bird(&renderer, &bird);
+
+                collision_logic(pipe, &bird, &player, &inc_flag, &renderer); //Checks for collisions and updates the score
+                
+                speed_up_logic(pipe, &player, &inc_flag, &letter, &renderer); //Increases the speed of the pipes every 5 points
+                
+                if(player.lives <= 0){
+                    player.status = GAMEOVER; //If the player has no lives left, the game is over
+                    game_progress= CLOSE_AT_GAMEOVER;
+                }
+
+            }else if(player.status == GAMEOVER){ //If the game is over
+                render_centered_image(letter.gameover_texture, 100, 360, &renderer); //360x100 gameover image
+        
+            }else if(player.status == CHOOSING_DIFFICULTY){ //If the user is choosing a difficulty
+                render_centered_image(letter.choose_difficulty_texture, 200, 700, &renderer); //360x100 gameover image
+                
+                if(difficulty != START_DIFFICULTY){ //If the user has chosen a difficulty
+                    player.status = FIRST_KEY; 
+                    game_progress = CLOSE_AT_PLAYING; //Changes the game progress to playing
+                    
+                    game_set(&bird, pipe, &player, &letter, difficulty, &renderer); //Resets the game with the new difficulty
+                }
+            }
+            // Shows the result
+            SDL_RenderPresent(renderer);
+            
+            SDL_Delay(16); //60 FFPS   
+        }
     }
 
-     
     // Clean up SDL resources
-    kill_SDL(&window, &renderer, &bird, pipe, &player, &letter, background_texture, has_started); 
+    kill_SDL(&window, &renderer, &bird, pipe, &player, &letter, background_texture, game_progress); 
     return 0;
 
 }

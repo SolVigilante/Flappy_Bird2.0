@@ -1,6 +1,14 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+//Screen control
+#define CLOSE_AT_USERNAME 'A'
+#define CLOSE_AT_DIFFICULTY 'B'
+#define CLOSE_AT_PLAYING 'P'
+#define CLOSE_AT_GAMEOVER 'C'
+#define CLOSE_AT_CHOOSE_DIFFICULTY 'D'
+#define CLOSE_AT_CHOOSE_USERNAME 'E'
+
 //Player constants
 #define START_DIFFICULTY -1
 #define HEART_HEIGHT 50
