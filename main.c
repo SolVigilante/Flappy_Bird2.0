@@ -217,7 +217,15 @@ int main() {
                 }
             }else if(player.status == CHOOSING_SLOT){
                 if (player.slot_info.slot != NULL){
-                    player.status = RENAME; 
+                    get_username(&player);
+                    if(!strcmp(player.username, "EMPTY\n")){
+                        player.status = CHOOSING_USERNAME;
+                        player.slot_info.rewrite = DO_RENAME;
+                        SDL_StartTextInput();
+                        is_text_input_active = true;
+                    }else{
+                        player.status = RENAME;
+                    } 
                 }
                 slot_name(&player, &renderer);
                 render_centered_image(letter.choose_slot_texture, 61, 536, &renderer); //750x76 start image
