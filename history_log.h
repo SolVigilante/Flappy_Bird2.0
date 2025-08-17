@@ -1,0 +1,9 @@
+#ifndef HISTORY_LOG_H
+#define HISTORY_LOG_H
+#include "constants.h"
+
+void slot_name(player_t* player, SDL_Renderer ** renderer);
+void write_history_log(player_t* player);
+void get_username(player_t *player);
+
+#endif //HISTORY_LOG_H
