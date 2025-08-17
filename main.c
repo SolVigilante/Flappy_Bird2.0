@@ -220,7 +220,7 @@ int main() {
                     get_username(&player);
                     if(!strcmp(player.username, "EMPTY\n")){
                         player.status = CHOOSING_USERNAME;
-                        player.slot_info.rewrite = DO_RENAME;
+                        player.slot_info.rewrite = DO_REWRITE;
                         SDL_StartTextInput();
                         is_text_input_active = true;
                     }else{
