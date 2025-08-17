@@ -4,7 +4,7 @@ CC := gcc
 CFLAGS := -c -g -Wall -I.
 LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
-Flappy_Bird: main.o bird.o pipes.o screen.o logic.o player.o
+Flappy_Bird: main.o bird.o pipes.o screen.o logic.o player.o history_log.o
 	${CC} $^ -o Flappy_Bird ${LDFLAGS}
 
 main.o: main.c bird.h pipes.h screen.h logic.h player.h constants.h
@@ -24,6 +24,9 @@ logic.o: logic.c logic.h bird.h pipes.h screen.h player.h constants.h
 
 player.o: player.c player.h constants.h
 	${CC} ${CFLAGS} player.c
+
+history_log.o: history_log.c history_log.h constants.h screen.h
+	${CC} ${CFLAGS} history_log.c
 
 clean:
 	rm -f *.o 

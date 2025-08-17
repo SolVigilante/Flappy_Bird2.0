@@ -49,12 +49,9 @@ void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * 
     for (i=NUM_PIPES; i>0; i--){
         init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH), difficulty, false);
     }
-    for(i=0; i<NUM_PIPES; i++){
-                //Initialize the top pipe image
-                (pipe+i)->up_pipe_texture= IMG_LoadTexture(*renderer, "image/up_pipe.png");
-
-                //Initialize the top pipe image
-                (pipe+i)->down_pipe_texture= IMG_LoadTexture(*renderer, "image/down_pipe.png");
-        }
     init_bird(renderer, bird);
 }
+
+
+
+

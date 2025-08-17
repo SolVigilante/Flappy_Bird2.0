@@ -24,8 +24,6 @@ void init_bird(SDL_Renderer ** renderer, bird_t * bird){
     bird->acceleration = GRAVITY; // Gravity acceleration   
     bird->space_pressed = false; //Space key is not pressed
     bird->collided = false;
-    bird->bird_texture= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
-    SDL_SetTextureBlendMode(bird->bird_texture, SDL_BLENDMODE_BLEND); //enables transparecy
 }
 
 //Render the texture of the bird

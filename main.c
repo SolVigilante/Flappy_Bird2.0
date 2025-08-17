@@ -12,6 +12,7 @@
 #include "bird.h"
 #include "logic.h"
 #include "player.h"
+#include "history_log.h"
 #include "constants.h"
 
 static void collision_logic(pipe_t* pipe, bird_t* bird, player_t* player, bool *inc_flag, SDL_Renderer** renderer    );
@@ -58,16 +59,17 @@ int main() {
     SDL_Event event; //Event variable
     bool running = true; //break flag
     bool inc_flag = false; //Flag to know if the speed has been increased
-    int game_progress = CLOSE_AT_USERNAME; //Flag to know if the game has started
     int difficulty = START_DIFFICULTY; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
     char txtinput[MAX_USERNAME_LENGTH]= ""; //Input variable for the user to choose a difficulty
     bool is_text_input_active = false; //Flag to know if the text input is active
 
-    init_letter_texture(&letter, &renderer); //Initializes the letter texture
+    init_textures(pipe, &bird, &player,&letter, &renderer); //Initializes the textures of the game
     init_player(&renderer, &player); //Initializes the player
+    player.status = CHOOSING_SLOT; //Initial status is choosing username
+    player.slot_info.slot = NULL;
+    player.slot_info.rewrite = START_SLOT;
+    player.username[0] = '\0'; //Initialize the username to an empty string
 
-    SDL_StartTextInput();
-    is_text_input_active = true;
 
     while(running) {
         while (SDL_PollEvent(&event)) {
@@ -101,12 +103,31 @@ int main() {
                     else if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_3){
                         difficulty = HARD; //Sets the difficulty to hard
                     }
+
+                    if(player.status == CHOOSING_SLOT && event.key.keysym.sym == SDLK_1){
+                        player.slot_info.slot = "history_log/first_slot.txt";
+                    }
+                    else if(player.status == CHOOSING_SLOT && event.key.keysym.sym == SDLK_2){
+                        player.slot_info.slot  = "history_log/second_slot.txt";
+                    }
+                    else if(player.status == CHOOSING_SLOT && event.key.keysym.sym == SDLK_3){
+                        player.slot_info.slot  = "history_log/third_slot.txt";
+                    }
+
+                    if(player.status == RENAME && event.key.keysym.sym == SDLK_y){
+                        player.slot_info.rewrite = DO_REWRITE;
+                    }
+                    else if(player.status == RENAME && event.key.keysym.sym == SDLK_n){
+                        player.slot_info.rewrite  = NO_REWRITE;
+                    }
     
 
                     // waits for r key to reset the game
                     if (player.status==GAMEOVER && event.key.keysym.sym == SDLK_r) {
                         init_player(&renderer, &player); //Reinitializes the player
+                        player.status = CHOOSING_DIFFICULTY; //Initial status is choosing username
                         difficulty = START_DIFFICULTY;
+                        player.slot_info.rewrite = NO_REWRITE;
                     }
 
                     if(player.status == CHOOSING_USERNAME){
@@ -114,7 +135,6 @@ int main() {
                             txtinput[strlen(txtinput) - 1] = '\0'; //Removes the last character from the input
                         }else if(event.key.keysym.sym == SDLK_RETURN) { //If enter is pressed
                             player.status = CHOOSING_DIFFICULTY; //Changes the status to choosing difficulty
-                            game_progress = CLOSE_AT_CHOOSE_DIFFICULTY; //Changes the game progress to choosing difficulty
                             strncpy(player.username, txtinput, MAX_USERNAME_LENGTH - 1);
                         }
                     }
@@ -148,17 +168,13 @@ int main() {
             //Draw Background
             SDL_RenderCopy(renderer, background_texture, NULL, NULL);
 
-                //Draw Background
-            SDL_RenderCopy(renderer, background_texture, NULL, NULL);
-
            
-             if(player.status == CHOOSING_USERNAME && is_text_input_active){ //If the user is choosing a username
-                SDL_Color color = {255, 255, 255, 255}; //White color for the text
+            if(player.status == CHOOSING_USERNAME && is_text_input_active){ //If the user is choosing a username
+                SDL_Color color = {0xB8, 0x8F, 0x33, 255}; //Gold color for the text 
                 render_centered_image(player.username_texture, 61, 536, &renderer); //750x76 start image
                 if(strlen(txtinput)>0 && is_text_input_active){ //If the user has entered a username and the text input is active
                     renderTextCentered(&renderer, player.username_font, txtinput, color); //Renders the text input in the center of the screen
                 }
-                
             }
 
             if(player.status == PLAYING || player.status==FIRST_KEY){ //If the game is not over and the user has chosen a difficulty
@@ -185,7 +201,7 @@ int main() {
                 
                 if(player.lives <= 0){
                     player.status = GAMEOVER; //If the player has no lives left, the game is over
-                    game_progress= CLOSE_AT_GAMEOVER;
+                    write_history_log(&player);
                 }
 
             }else if(player.status == GAMEOVER){ //If the game is over
@@ -196,10 +212,28 @@ int main() {
                 
                 if(difficulty != START_DIFFICULTY){ //If the user has chosen a difficulty
                     player.status = FIRST_KEY; 
-                    game_progress = CLOSE_AT_PLAYING; //Changes the game progress to playing
                     
                     game_set(&bird, pipe, &player, &letter, difficulty, &renderer); //Resets the game with the new difficulty
                 }
+            }else if(player.status == CHOOSING_SLOT){
+                if (player.slot_info.slot != NULL){
+                    player.status = RENAME; 
+                }
+                slot_name(&player, &renderer);
+                render_centered_image(letter.choose_slot_texture, 61, 536, &renderer); //750x76 start image
+
+
+            }else if(player.status == RENAME){
+                if(player.slot_info.rewrite == DO_REWRITE){
+                    player.status = CHOOSING_USERNAME; 
+                    SDL_StartTextInput();
+                    is_text_input_active = true;
+                }else if(player.slot_info.rewrite == NO_REWRITE){
+                    get_username(&player);
+                    player.status = CHOOSING_DIFFICULTY; 
+                }
+                render_centered_image(letter.choose_rename_texture, 95, 425, &renderer); //750x76 start image
+
             }
             // Shows the result
             SDL_RenderPresent(renderer);
@@ -209,7 +243,7 @@ int main() {
     }
 
     // Clean up SDL resources
-    kill_SDL(&window, &renderer, &bird, pipe, &player, &letter, background_texture, game_progress); 
+    kill_SDL(&window, &renderer, &bird, pipe, &player, &letter, background_texture); 
     return 0;
 
 }
