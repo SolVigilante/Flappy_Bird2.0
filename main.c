@@ -120,10 +120,15 @@ int main() {
                     else if(player.status == RENAME && event.key.keysym.sym == SDLK_n){
                         player.slot_info.rewrite  = NO_REWRITE;
                     }
-    
 
+                    if(event.key.keysym.sym == SDLK_TAB){
+                        player.status = PAUSE; //chages the status of the player
+                    }
+                    if(player.status == PAUSE && event.key.keysym.sym == SDLK_c){
+                        player.status = PLAYING;
+                    }
                     // waits for r key to reset the game
-                    if (player.status==GAMEOVER && event.key.keysym.sym == SDLK_r) {
+                    if ((player.status==GAMEOVER || player.status == PAUSE) && event.key.keysym.sym == SDLK_r) {
                         init_player(&renderer, &player); //Reinitializes the player
                         player.status = CHOOSING_DIFFICULTY; //Initial status is choosing username
                         difficulty = START_DIFFICULTY;
@@ -203,6 +208,9 @@ int main() {
                     player.status = GAMEOVER; //If the player has no lives left, the game is over
                     write_history_log(&player);
                 }
+
+            }else if (player.status==PAUSE){//if the game is paused
+                render_centered_image(letter.pause_texture, 100, 360, &renderer);
 
             }else if(player.status == GAMEOVER){ //If the game is over
                 render_centered_image(letter.gameover_texture, 100, 360, &renderer); //360x100 gameover image

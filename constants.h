@@ -22,6 +22,7 @@
 #define DO_REWRITE 4
 #define NO_REWRITE 5
 #define START_SLOT 7
+#define PAUSE 8
 
 
 //Struct
@@ -106,6 +107,7 @@ typedef struct{
     SDL_Texture* choose_difficulty_texture; //Texture for the choose difficulty screen
     SDL_Texture* choose_slot_texture; //Texture for the choose difficulty screen
     SDL_Texture * choose_rename_texture;
+    SDL_Texture * pause_texture; 
 }letter_texture_t;
 
 #endif // CONSTANTS_H

@@ -76,6 +76,7 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     letter_texture->choose_difficulty_texture = IMG_LoadTexture(*renderer, "image/difficulty.png");//Initialize the image of "Choose Difficulty"
     letter_texture->choose_slot_texture = IMG_LoadTexture(*renderer, "image/memory_slot.png");
     letter_texture->choose_rename_texture = IMG_LoadTexture (*renderer, "image/rename_texture.png");
+    letter_texture->pause_texture= IMG_LoadTexture(*renderer, "image/Pause.png");
 }
 // Function to clean up SDL resources
 //The flag has started is used to know wich resources to free. If tthe ame has stated for even once it will free all the resources. If no i will only free 
@@ -108,6 +109,9 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
 
         printf("Destroying choose slot texture...\n");
         SDL_DestroyTexture(letter->choose_slot_texture);
+
+        printf("Destroying pause texture...\n");
+        SDL_DestroyTexture(letter->pause_texture);
 
         printf("Destroying background texture...\n");
         SDL_DestroyTexture(background_texture);
