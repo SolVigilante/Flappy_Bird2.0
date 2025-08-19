@@ -6,6 +6,7 @@
 
 static void move_pipe (pipe_t *pipe, int pipes_left, int difficulty);
 
+
 //Frontend
 void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
         switch (update){
@@ -50,7 +51,7 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
                 move_pipe(pipe+i, NUM_PIPES-i-1,difficulty ); //Moves pipe 
                 draw_pipes(renderer, pipe+i); // Draw the pipe in the new position
                 if((pipe+i)->d_pipe){
-                        if(((pipe+i)-> bounced == false)){ //If the gap is too high
+                        if((pipe+i)-> bounced == false){ //If the gap is too high
                                 (pipe+i)-> gap_height += 1; // Randomly change the gap height
                         }else if((pipe+i)-> bounced == true){
                                 (pipe+i)-> gap_height -= 1; // Randomly change the gap height
@@ -63,7 +64,7 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
                         }
                         //Variable Width logic
                         
-                        if(((pipe+i)-> bounce_width == false)){ //If the gap is too high
+                        if((pipe+i)-> bounce_width == false){ //If the gap is too high
                                 (pipe+i)-> width += 1; // Randomly change the gap height
                         }else if((pipe+i)-> bounce_width == true){
                                 (pipe+i)-> width -= 1; // Randomly change the gap height
