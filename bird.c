@@ -58,14 +58,9 @@ void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
 static void bird_update(bird_t* bird, char c){
     switch (c) {
         case FLYING_BIRD: 
-            if(bird->velocity > 0.0f){ // If the bird is already flying up, it doesn't do anything
-                bird->velocity = -GRAVITY/3.0f; // Sets the velocity to a negative value to make the bird fly up
-                bird->acceleration = 0.0f; // It sets the acceleration to 0, so it doesn't fall immediately
-                break;
-            }else{
-                 bird->acceleration += GRAVITY*0.05; //It adds a portion of the gravity to the acceleration everio 0.1 seconds 
-                break;
-            }
+    
+            bird->velocity = -GRAVITY/3.0f; // Sets the velocity to a negative value to make the bird fly up
+            bird->acceleration = 0.0f; // It sets the acceleration to 0, so it doesn't fall immediately 
             
         case FALLING_BIRD:
             bird->acceleration += GRAVITY*0.05; //It adds a portion of the gravity to the acceleration everio 0.1 seconds 

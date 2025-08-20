@@ -190,6 +190,14 @@ void render_centered_image(SDL_Texture* texture, int height, int width, SDL_Rend
     SDL_RenderCopy(*renderer, texture, NULL, &text_shape);
 }
 
+void renderImage(SDL_Texture* texture, int height, int width,double cord_y, double cord_x, SDL_Renderer** renderer){
+    SDL_Rect text_shape = { (SCREEN_WIDTH -width)/cord_x, (SCREEN_HEIGHT - height)/cord_y, width, height }; //Hearts at the left top corner with a fixed width and height
+    // Draw the hearts as a rectangle
+    SDL_SetRenderDrawColor(*renderer, 255, 255, 0, 255); 
+    SDL_RenderCopy(*renderer, texture, NULL, &text_shape);
+}
+
+
 int renderTextCentered(SDL_Renderer **renderer, TTF_Font *font, const char *text, SDL_Color color) {
     int err = 0; //Error flag
     //Creates the text surface

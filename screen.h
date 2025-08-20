@@ -14,6 +14,7 @@ int init_screen (SDL_Window** window, SDL_Renderer** renderer);
 void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player, letter_texture_t * letter, SDL_Texture * background_texture); ;
 long long current_time_ms(void);
 void render_centered_image(SDL_Texture* texture, int height, int width, SDL_Renderer** renderer);
+void renderImage(SDL_Texture* texture, int height, int width, double cord_y, double cord_x, SDL_Renderer** renderer);
 int renderTextCentered(SDL_Renderer **renderer, TTF_Font *font, const char *text, SDL_Color color);
 void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture_t* letter_texture,  SDL_Renderer ** renderer);
 #endif // SCREEN_H

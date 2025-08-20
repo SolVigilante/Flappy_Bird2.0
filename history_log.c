@@ -33,10 +33,10 @@ void slot_name(player_t* player, SDL_Renderer ** renderer){
                     strncat(names, num, sizeof(names)-1);
                     strncat(names, player_name , sizeof(names)-1);
                 }
+                renderTextCentered(renderer, player->username_font, names, color);
             }  
         
     }
-    renderTextCentered(renderer, player->username_font, names, color);
 }
 
 void write_history_log(player_t* player){

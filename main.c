@@ -65,7 +65,7 @@ int main() {
 
     init_textures(pipe, &bird, &player,&letter, &renderer); //Initializes the textures of the game
     init_player(&renderer, &player); //Initializes the player
-    player.status = STARTING; //Initial status is choosing username
+    player.status = CHOOSING_SLOT; //Initial status is choosing username
     bird.shape = BIRD_2;
     player.slot_info.slot = NULL;
     player.slot_info.rewrite = START_SLOT;
@@ -97,7 +97,7 @@ int main() {
                     }
 
                     if(player.status == STARTING && event.key.keysym.sym == SDLK_4){
-                        player.status = CHOOSING_SLOT;
+                        player.status = CHOOSING_DIFFICULTY;
                     }else if(player.status == STARTING && event.key.keysym.sym == SDLK_2){
                         player.status = RULES;
                     }else if(player.status == STARTING && event.key.keysym.sym == SDLK_3){
@@ -154,7 +154,7 @@ int main() {
                     // waits for r key to reset the game
                     if ((player.status==GAMEOVER || player.status == PAUSE) && event.key.keysym.sym == SDLK_r) {
                         init_player(&renderer, &player); //Reinitializes the player
-                        player.status = CHOOSING_DIFFICULTY; //Initial status is choosing username
+                        player.status = STARTING; //Initial status is choosing username
                         difficulty = START_DIFFICULTY;
                         player.slot_info.rewrite = NO_REWRITE;
                     }
@@ -163,7 +163,7 @@ int main() {
                         if(event.key.keysym.sym == SDLK_BACKSPACE && strlen(txtinput) > 0) { //If backspace is pressed and the input is not empty
                             txtinput[strlen(txtinput) - 1] = '\0'; //Removes the last character from the input
                         }else if(event.key.keysym.sym == SDLK_RETURN) { //If enter is pressed
-                            player.status = CHOOSING_DIFFICULTY; //Changes the status to choosing difficulty
+                            player.status = STARTING; //Changes the status to choosing difficulty
                             strncpy(player.username, txtinput, MAX_USERNAME_LENGTH - 1);
                         }
                     }
@@ -238,6 +238,9 @@ int main() {
 
             }else if(player.status== APPEARANCE){
                 render_centered_image(letter.appearance_texture, 200, 700, &renderer);
+                renderImage(bird.bird_texture, 50, 50, 1.5 , 2.55 , &renderer);
+                renderImage(bird.bird_texture2, 50, 50, 1.5 ,2, &renderer);
+                renderImage(bird.bird_texture3, 50, 50, 1.5 ,1.65 , &renderer);
 
             }else if(player.status== RULES){
                 render_centered_image(letter.rules_texture, 100, 360, &renderer);
@@ -279,7 +282,7 @@ int main() {
                     is_text_input_active = true;
                 }else if(player.slot_info.rewrite == NO_REWRITE){
                     get_username(&player);
-                    player.status = CHOOSING_DIFFICULTY; 
+                    player.status = STARTING; 
                 }
                 render_centered_image(letter.choose_rename_texture, 95, 425, &renderer); //750x76 start image
 

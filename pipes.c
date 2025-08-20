@@ -9,7 +9,7 @@ static void move_pipe (pipe_t *pipe, int pipes_left, int difficulty);
 
 //Frontend
 void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
-        switch (update){
+        switch ((int)update){
                 case false: //If the pipe is being updated
                         if(difficulty == MEDIUM){
                                 pipe->d_pipe = rand() % 4 == 0; // 25% chance of being dynamic
