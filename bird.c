@@ -37,9 +37,19 @@ void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
     }else{
         alpha = 255; // If the bird has not collided, it is fully opaque
     }
-    SDL_SetTextureAlphaMod(bird->bird_texture, alpha);
-    // Draw the bird as a rectangle
-    SDL_RenderCopyEx(*renderer, bird->bird_texture, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+    if(bird->shape == 1){
+        SDL_SetTextureAlphaMod(bird->bird_texture, alpha);
+        // Draw the bird as a rectangle
+        SDL_RenderCopyEx(*renderer, bird->bird_texture, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+    }else if(bird->shape == 2){
+        SDL_SetTextureAlphaMod(bird->bird_texture2, alpha);
+        // Draw the bird as a rectangle
+        SDL_RenderCopyEx(*renderer, bird->bird_texture2, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+    }else if(bird->shape ==3){
+        SDL_SetTextureAlphaMod(bird->bird_texture3, alpha);
+        // Draw the bird as a rectangle
+        SDL_RenderCopyEx(*renderer, bird->bird_texture3, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+    }
 
 }
 

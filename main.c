@@ -65,7 +65,8 @@ int main() {
 
     init_textures(pipe, &bird, &player,&letter, &renderer); //Initializes the textures of the game
     init_player(&renderer, &player); //Initializes the player
-    player.status = CHOOSING_SLOT; //Initial status is choosing username
+    player.status = STARTING; //Initial status is choosing username
+    bird.shape = BIRD_2;
     player.slot_info.slot = NULL;
     player.slot_info.rewrite = START_SLOT;
     player.username[0] = '\0'; //Initialize the username to an empty string
@@ -94,6 +95,29 @@ int main() {
                                 break;
                         }
                     }
+
+                    if(player.status == STARTING && event.key.keysym.sym == SDLK_4){
+                        player.status = CHOOSING_SLOT;
+                    }else if(player.status == STARTING && event.key.keysym.sym == SDLK_2){
+                        player.status = RULES;
+                    }else if(player.status == STARTING && event.key.keysym.sym == SDLK_3){
+                        player.status = APPEARANCE;
+                    }
+
+                    if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_1){
+                        bird.shape = BIRD;
+                    }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_2){
+                        bird.shape = BIRD_2;
+                    }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_3){
+                        bird.shape = BIRD_3;
+                    }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_e){
+                        player.status = STARTING;
+                    }
+
+                    if(player.status == RULES && event.key.keysym.sym == SDLK_e){
+                        player.status = STARTING;
+                    }
+
                     if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_1){
                         difficulty = EASY; //Sets the difficulty to easy
                     }
@@ -125,7 +149,7 @@ int main() {
                         player.status = PAUSE; //chages the status of the player
                     }
                     if(player.status == PAUSE && event.key.keysym.sym == SDLK_c){
-                        player.status = PLAYING;
+                        player.status = PLAYING; //resumes the game by changing its status back to playing
                     }
                     // waits for r key to reset the game
                     if ((player.status==GAMEOVER || player.status == PAUSE) && event.key.keysym.sym == SDLK_r) {
@@ -208,6 +232,15 @@ int main() {
                     player.status = GAMEOVER; //If the player has no lives left, the game is over
                     write_history_log(&player);
                 }
+
+            }else if(player.status== STARTING){
+                render_centered_image(letter.starting_texture, 200, 700, &renderer);
+
+            }else if(player.status== APPEARANCE){
+                render_centered_image(letter.appearance_texture, 200, 700, &renderer);
+
+            }else if(player.status== RULES){
+                render_centered_image(letter.rules_texture, 100, 360, &renderer);
 
             }else if (player.status==PAUSE){//if the game is paused
                 render_centered_image(letter.pause_texture, 100, 360, &renderer);

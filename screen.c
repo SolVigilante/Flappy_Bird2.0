@@ -42,6 +42,12 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     bird->bird_texture= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
     SDL_SetTextureBlendMode(bird->bird_texture, SDL_BLENDMODE_BLEND); //enables transparecy
 
+    bird->bird_texture2= IMG_LoadTexture(*renderer, "image/bird2.png");//Initialize bird image
+    SDL_SetTextureBlendMode(bird->bird_texture2, SDL_BLENDMODE_BLEND); //enables transparecy
+
+    bird->bird_texture3= IMG_LoadTexture(*renderer, "image/bird3.png");//Initialize bird image
+    SDL_SetTextureBlendMode(bird->bird_texture3, SDL_BLENDMODE_BLEND); //enables transparecy
+
     //Init pipes textures
     for(int i=0; i<NUM_PIPES; i++){
         //Initialize the top pipe image
@@ -77,6 +83,9 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     letter_texture->choose_slot_texture = IMG_LoadTexture(*renderer, "image/memory_slot.png");
     letter_texture->choose_rename_texture = IMG_LoadTexture (*renderer, "image/rename_texture.png");
     letter_texture->pause_texture= IMG_LoadTexture(*renderer, "image/Pause.png");
+    letter_texture->starting_texture=IMG_LoadTexture(*renderer, "image/Flappy_bird.png");
+    letter_texture->rules_texture=IMG_LoadTexture(*renderer, "image/Rules:Commands.png");
+    letter_texture->appearance_texture=IMG_LoadTexture(*renderer, "image/appearance.png");
 }
 // Function to clean up SDL resources
 //The flag has started is used to know wich resources to free. If tthe ame has stated for even once it will free all the resources. If no i will only free 
@@ -113,6 +122,15 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
         printf("Destroying pause texture...\n");
         SDL_DestroyTexture(letter->pause_texture);
 
+        printf("Destroying starting texture..\n");
+        SDL_DestroyTexture(letter->starting_texture);
+
+        printf("Destroying rules texture...\n");
+        SDL_DestroyTexture(letter->rules_texture);
+
+        printf("Destroying appearance texture..\n");
+        SDL_DestroyTexture(letter->appearance_texture);
+
         printf("Destroying background texture...\n");
         SDL_DestroyTexture(background_texture);
         
@@ -121,6 +139,12 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
 
         printf("Destroying bird texture...\n");
         SDL_DestroyTexture(bird->bird_texture);
+
+        printf("Destroying bird texture 2...\n");
+        SDL_DestroyTexture(bird->bird_texture2);
+
+        printf("Destroying bird texture 3...\n");
+        SDL_DestroyTexture(bird->bird_texture3);
 
         printf("Destroying pipes textures...\n");
         for (int i = 0; i < NUM_PIPES; i++) {

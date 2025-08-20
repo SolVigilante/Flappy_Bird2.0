@@ -23,6 +23,9 @@
 #define NO_REWRITE 5
 #define START_SLOT 7
 #define PAUSE 8
+#define STARTING 9
+#define RULES 10
+#define APPEARANCE 11
 
 
 //Struct
@@ -50,7 +53,7 @@ typedef struct {
 #define HARD 'H'
 #define SPEED_LIMIT(difficulty) (((difficulty) == HARD) ? 15 : ((difficulty) == MEDIUM) ? 7 : 4) //Speed limit for each difficulty
 
-//pipes 
+//pipes
 // constants
 #define GAP_PWP 200 //Gap beween pipes
 #define MAX_PIPES_WIDTH 150 //Max width a dynamic pipe can have
@@ -79,9 +82,15 @@ typedef struct{
 #define BIRD_HEIGHT 50
 #define FLYING_BIRD ' ' //Constant that indicates the bird is flying
 #define FALLING_BIRD '0' //constant that indicates the bird is falling
+#define BIRD 1
+#define BIRD_2 2
+#define BIRD_3 3
+
 //Struct
 typedef struct{
     SDL_Texture* bird_texture; //Image for the bird texture
+    SDL_Texture* bird_texture2;
+    SDL_Texture* bird_texture3;
     int bird_height; 
     int bird_width;
     long long last_collision_time; //Last time the bird collided, initialized to a negative value so the first increment cant happen immediately
@@ -93,6 +102,7 @@ typedef struct{
     int bird_y; //Y position of the bird
     float velocity; //Velocitty of the bird
     float acceleration; //Acceleration of the bird
+    int shape; //shape of the bird
 }bird_t;
 
 //Screen
@@ -108,6 +118,9 @@ typedef struct{
     SDL_Texture* choose_slot_texture; //Texture for the choose difficulty screen
     SDL_Texture * choose_rename_texture;
     SDL_Texture * pause_texture; 
+    SDL_Texture * starting_texture;
+    SDL_Texture * rules_texture;
+    SDL_Texture * appearance_texture;
 }letter_texture_t;
 
 #endif // CONSTANTS_H
