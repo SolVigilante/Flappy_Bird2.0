@@ -36,11 +36,22 @@ void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
 
 
 void draw_pipes(SDL_Renderer ** renderer, pipe_t * pipe){
-    SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
-    SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; 
-    // Draw the bird as a rectangle
-    SDL_RenderCopy(*renderer, pipe->up_pipe_texture, NULL, &up_pipe_shape);
-    SDL_RenderCopy(*renderer, pipe->down_pipe_texture, NULL, &down_pipe_shape);
+        SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
+        SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; 
+        SDL_RenderCopy(*renderer, pipe->up_pipe_texture, NULL, &up_pipe_shape);
+        SDL_RenderCopy(*renderer, pipe->down_pipe_texture, NULL, &down_pipe_shape);
+}
+void draw_pipes2(SDL_Renderer ** renderer, pipe_t * pipe){
+        SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
+        SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; 
+        SDL_RenderCopy(*renderer, pipe->up_pipe_texture2, NULL, &up_pipe_shape);
+        SDL_RenderCopy(*renderer, pipe->down_pipe_texture2, NULL, &down_pipe_shape);
+}
+void draw_pipes3(SDL_Renderer ** renderer, pipe_t * pipe){
+        SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
+        SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; 
+        SDL_RenderCopy(*renderer, pipe->up_pipe_texture3, NULL, &up_pipe_shape);
+        SDL_RenderCopy(*renderer, pipe->down_pipe_texture3, NULL, &down_pipe_shape);
 }
 
 //Backend
@@ -49,7 +60,12 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
         int i;
         for(i = 0; i<NUM_PIPES; i++){
                 move_pipe(pipe+i, NUM_PIPES-i-1,difficulty ); //Moves pipe 
-                draw_pipes(renderer, pipe+i); // Draw the pipe in the new position
+                if(pipe->style== PIPE_STYLE1)
+                        draw_pipes(renderer, pipe+i); // Draw the pipe in the new position
+                else if(pipe->style== PIPE_STYLE2)
+                        draw_pipes2(renderer, pipe+i);
+                else if(pipe->style== PIPE_STYLE3)
+                        draw_pipes3(renderer, pipe+i);
                 if((pipe+i)->d_pipe){
                         if((pipe+i)-> bounced == false){ //If the gap is too high
                                 (pipe+i)-> gap_height += 1; // Randomly change the gap height

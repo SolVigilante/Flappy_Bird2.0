@@ -61,10 +61,18 @@ typedef struct {
 #define PIPES_WIDTH 100 //Width of the pipes
 #define PIPES_GAP 250 //size of gap
 #define NUM_PIPES 5 //number of pipes
+#define PIPE_STYLE1 10
+#define PIPE_STYLE2 20
+#define PIPE_STYLE3 30 
+
 //Struct
 typedef struct{
     SDL_Texture* up_pipe_texture; //pipe texture
+    SDL_Texture* up_pipe_texture2; //pipe texture 2
+    SDL_Texture * up_pipe_texture3; //pipe texture 3
     SDL_Texture* down_pipe_texture; //pipe texture
+    SDL_Texture* down_pipe_texture2; //pipe texture
+    SDL_Texture * down_pipe_texture3; //pipe texture 3
     long long last_increment_time; //Last time the speed was increased
     int width; //Width of the pipe
     int position; //X position for the pipe
@@ -74,6 +82,7 @@ typedef struct{
     bool d_pipe; //Flag to know whether the pipe is dynamic or not
     bool bounced; //Flag to know whether the pipe has bounced
     bool has_passed;//Flag to know whhether the bird has passed the pipe 
+    int style;
 }pipe_t;
 
 //bird constants
@@ -116,7 +125,7 @@ typedef struct{
     SDL_Texture* speed_up_texture; //Texture for the speed up screen
     SDL_Texture* choose_difficulty_texture; //Texture for the choose difficulty screen
     SDL_Texture* choose_slot_texture; //Texture for the choose difficulty screen
-    SDL_Texture * choose_rename_texture;
+    SDL_Texture * choose_rename_texture; 
     SDL_Texture * pause_texture; 
     SDL_Texture * starting_texture;
     SDL_Texture * rules_texture;

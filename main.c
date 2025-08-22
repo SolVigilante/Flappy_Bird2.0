@@ -52,6 +52,10 @@ int main() {
 
     //Initialize the background image
     SDL_Texture* background_texture = IMG_LoadTexture(renderer, "image/background.jpg");
+    SDL_Texture* background_texture2 = IMG_LoadTexture(renderer, "image/background2.jpg");
+    SDL_Texture* background_texture3 = IMG_LoadTexture(renderer, "image/background3.jpg");
+    
+
 
 
     
@@ -66,10 +70,11 @@ int main() {
     init_textures(pipe, &bird, &player,&letter, &renderer); //Initializes the textures of the game
     init_player(&renderer, &player); //Initializes the player
     player.status = CHOOSING_SLOT; //Initial status is choosing username
-    bird.shape = BIRD_2;
+    bird.shape = BIRD;
     player.slot_info.slot = NULL;
     player.slot_info.rewrite = START_SLOT;
     player.username[0] = '\0'; //Initialize the username to an empty string
+    pipe->style = PIPE_STYLE1;
 
 
     while(running) {
@@ -106,10 +111,13 @@ int main() {
 
                     if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_1){
                         bird.shape = BIRD;
+                        pipe->style = PIPE_STYLE1;
                     }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_2){
                         bird.shape = BIRD_2;
+                        pipe->style = PIPE_STYLE2;
                     }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_3){
                         bird.shape = BIRD_3;
+                        pipe->style = PIPE_STYLE3;
                     }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_e){
                         player.status = STARTING;
                     }
@@ -195,7 +203,16 @@ int main() {
             SDL_RenderClear(renderer);
 
             //Draw Background
-            SDL_RenderCopy(renderer, background_texture, NULL, NULL);
+            if(bird.shape == 1){
+                SDL_RenderCopy(renderer, background_texture, NULL, NULL);
+
+            }
+            else if (bird.shape == 2){
+                SDL_RenderCopy(renderer, background_texture2, NULL, NULL);
+            }
+            else if(bird.shape == 3){
+                SDL_RenderCopy(renderer, background_texture3, NULL, NULL);
+            }
 
            
             if(player.status == CHOOSING_USERNAME && is_text_input_active){ //If the user is choosing a username
@@ -239,7 +256,7 @@ int main() {
             }else if(player.status== APPEARANCE){
                 render_centered_image(letter.appearance_texture, 200, 700, &renderer);
                 renderImage(bird.bird_texture, 50, 50, 1.5 , 2.55 , &renderer);
-                renderImage(bird.bird_texture2, 50, 50, 1.5 ,2, &renderer);
+                renderImage(bird.bird_texture2, 70, 70, 1.5 ,2, &renderer);
                 renderImage(bird.bird_texture3, 50, 50, 1.5 ,1.65 , &renderer);
 
             }else if(player.status== RULES){
@@ -295,7 +312,7 @@ int main() {
     }
 
     // Clean up SDL resources
-    kill_SDL(&window, &renderer, &bird, pipe, &player, &letter, background_texture); 
+    kill_SDL(&window, &renderer, &bird, pipe, &player, &letter, background_texture, background_texture2, background_texture3); 
     return 0;
 
 }

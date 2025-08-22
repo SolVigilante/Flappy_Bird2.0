@@ -11,7 +11,7 @@
 //It will return 0 on success and -1 on failure
 int init_screen (SDL_Window** window, SDL_Renderer** renderer);
 // Function to clean up SDL resources
-void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player, letter_texture_t * letter, SDL_Texture * background_texture); ;
+void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player, letter_texture_t * letter, SDL_Texture * background_texture, SDL_Texture * background_texture2, SDL_Texture * background_texture3);
 long long current_time_ms(void);
 void render_centered_image(SDL_Texture* texture, int height, int width, SDL_Renderer** renderer);
 void renderImage(SDL_Texture* texture, int height, int width, double cord_y, double cord_x, SDL_Renderer** renderer);

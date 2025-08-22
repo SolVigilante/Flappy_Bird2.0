@@ -52,9 +52,15 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     for(int i=0; i<NUM_PIPES; i++){
         //Initialize the top pipe image
         (pipe+i)->up_pipe_texture= IMG_LoadTexture(*renderer, "image/up_pipe.png");
-
-        //Initialize the top pipe image
         (pipe+i)->down_pipe_texture= IMG_LoadTexture(*renderer, "image/down_pipe.png");
+    }
+    for(int i=0; i<NUM_PIPES; i++){
+        (pipe+i)->up_pipe_texture3= IMG_LoadTexture(*renderer, "image/pipe_up3.png");
+        (pipe+i)->down_pipe_texture3= IMG_LoadTexture(*renderer, "image/pipe_down3.png");
+    }
+     for(int i=0; i<NUM_PIPES; i++){
+        (pipe+i)->up_pipe_texture2= IMG_LoadTexture(*renderer, "image/up2.png");
+        (pipe+i)->down_pipe_texture2= IMG_LoadTexture(*renderer, "image/down2.png");
     }
     //Init player fonts and textures
     int err = 0; //Error flag
@@ -90,7 +96,7 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
 // Function to clean up SDL resources
 //The flag has started is used to know wich resources to free. If tthe ame has stated for even once it will free all the resources. If no i will only free 
 //The resources that are needed to choose the difficulty
-void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player,  letter_texture_t * letter, SDL_Texture * background_texture) {
+void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player,  letter_texture_t * letter, SDL_Texture * background_texture, SDL_Texture * background_texture2,  SDL_Texture * background_texture3) {
 
 
         printf("Destroying text input...\n");
@@ -133,6 +139,13 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
 
         printf("Destroying background texture...\n");
         SDL_DestroyTexture(background_texture);
+
+        printf("Destroying background texture 2...\n");
+        SDL_DestroyTexture(background_texture2);
+
+        printf("Destroying background texture 3...\n");
+        SDL_DestroyTexture(background_texture3);
+        
         
         printf("Destroying username font..\n");
         TTF_CloseFont(player->username_font);
@@ -149,7 +162,11 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
         printf("Destroying pipes textures...\n");
         for (int i = 0; i < NUM_PIPES; i++) {
             SDL_DestroyTexture(pipe[i].up_pipe_texture);
+            SDL_DestroyTexture(pipe[i].up_pipe_texture3);
             SDL_DestroyTexture(pipe[i].down_pipe_texture);
+            SDL_DestroyTexture(pipe[i].down_pipe_texture3);
+             SDL_DestroyTexture(pipe[i].up_pipe_texture2);
+            SDL_DestroyTexture(pipe[i].down_pipe_texture2);
         }
         printf("Destroying score font..\n");
         TTF_CloseFont(player->score_font);
