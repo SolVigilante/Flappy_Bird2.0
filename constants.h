@@ -64,15 +64,19 @@ typedef struct {
 #define PIPE_STYLE1 10
 #define PIPE_STYLE2 20
 #define PIPE_STYLE3 30 
+#define PIPE_STYLE4 40 
 
 //Struct
 typedef struct{
     SDL_Texture* up_pipe_texture; //pipe texture
     SDL_Texture* up_pipe_texture2; //pipe texture 2
     SDL_Texture * up_pipe_texture3; //pipe texture 3
+    SDL_Texture * up_pipe_texture4; //pipe texture 4
     SDL_Texture* down_pipe_texture; //pipe texture
     SDL_Texture* down_pipe_texture2; //pipe texture
     SDL_Texture * down_pipe_texture3; //pipe texture 3
+    SDL_Texture * down_pipe_texture4; //pipe texture 4
+
     long long last_increment_time; //Last time the speed was increased
     int width; //Width of the pipe
     int position; //X position for the pipe
@@ -94,12 +98,15 @@ typedef struct{
 #define BIRD 1
 #define BIRD_2 2
 #define BIRD_3 3
+#define BIRD_4 4
+
 
 //Struct
 typedef struct{
-    SDL_Texture* bird_texture; //Image for the bird texture
-    SDL_Texture* bird_texture2;
+    SDL_Texture* bird_texture [5]; //Image for the bird texture
+    SDL_Texture* bird_texture2 [3];
     SDL_Texture* bird_texture3;
+     SDL_Texture* bird_texture4 [3];
     int bird_height; 
     int bird_width;
     long long last_collision_time; //Last time the bird collided, initialized to a negative value so the first increment cant happen immediately
@@ -112,6 +119,7 @@ typedef struct{
     float velocity; //Velocitty of the bird
     float acceleration; //Acceleration of the bird
     int shape; //shape of the bird
+    int frame;
 }bird_t;
 
 //Screen

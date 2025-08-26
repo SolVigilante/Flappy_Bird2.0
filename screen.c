@@ -39,12 +39,27 @@ int init_screen(SDL_Window** window, SDL_Renderer** renderer) {
 }
 void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture_t* letter_texture,  SDL_Renderer ** renderer){
     //Init bird image
-    bird->bird_texture= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
-    SDL_SetTextureBlendMode(bird->bird_texture, SDL_BLENDMODE_BLEND); //enables transparecy
+    bird->bird_texture [0]= IMG_LoadTexture(*renderer, "image/bird.png");//Initialize bird image
+    bird->bird_texture [1]= IMG_LoadTexture(*renderer, "image/bird_middown.png");//Initialize bird image
+    bird->bird_texture [2]= IMG_LoadTexture(*renderer, "image/bird_mid.png");//Initialize bird imag
+    bird->bird_texture [3]= IMG_LoadTexture(*renderer, "image/bird_midup.png");//Initialize bird imagee
+    bird->bird_texture [4]= IMG_LoadTexture(*renderer, "image/bird_up.png");//Initialize bird image
 
-    bird->bird_texture2= IMG_LoadTexture(*renderer, "image/bird2.png");//Initialize bird image
-    SDL_SetTextureBlendMode(bird->bird_texture2, SDL_BLENDMODE_BLEND); //enables transparecy
+    bird->bird_texture2[0]= IMG_LoadTexture(*renderer, "image/bird2.png");//Initialize bird image
+    bird->bird_texture2[1]= IMG_LoadTexture(*renderer, "image/bird2_middle.png");
+    bird->bird_texture2[2]= IMG_LoadTexture(*renderer, "image/bird2_up.png");
 
+    bird->bird_texture4[0] = IMG_LoadTexture(*renderer, "image/bird4.png");
+    bird->bird_texture4[1] = IMG_LoadTexture(*renderer, "image/bird4_mid.png");
+    bird->bird_texture4[2] = IMG_LoadTexture(*renderer, "image/bird4_up.png");
+    for(int i = 0; i<5; i++){
+        SDL_SetTextureBlendMode(bird->bird_texture[i], SDL_BLENDMODE_BLEND); //enables transparecy
+    }
+    for(int i =0; i<3; i++){
+        SDL_SetTextureBlendMode(bird->bird_texture2[i], SDL_BLENDMODE_BLEND); //enables transparecy
+        SDL_SetTextureBlendMode(bird->bird_texture4[i], SDL_BLENDMODE_BLEND); //enables transparecy
+    }
+    
     bird->bird_texture3= IMG_LoadTexture(*renderer, "image/bird3.png");//Initialize bird image
     SDL_SetTextureBlendMode(bird->bird_texture3, SDL_BLENDMODE_BLEND); //enables transparecy
 
@@ -61,6 +76,11 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
      for(int i=0; i<NUM_PIPES; i++){
         (pipe+i)->up_pipe_texture2= IMG_LoadTexture(*renderer, "image/up2.png");
         (pipe+i)->down_pipe_texture2= IMG_LoadTexture(*renderer, "image/down2.png");
+    }
+
+    for(int i=0; i<NUM_PIPES; i++){
+        (pipe+i)->up_pipe_texture4= IMG_LoadTexture(*renderer, "image/pipe_up4.png");
+        (pipe+i)->down_pipe_texture4= IMG_LoadTexture(*renderer, "image/pipe_down4.png");
     }
     //Init player fonts and textures
     int err = 0; //Error flag
@@ -96,7 +116,7 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
 // Function to clean up SDL resources
 //The flag has started is used to know wich resources to free. If tthe ame has stated for even once it will free all the resources. If no i will only free 
 //The resources that are needed to choose the difficulty
-void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player,  letter_texture_t * letter, SDL_Texture * background_texture, SDL_Texture * background_texture2,  SDL_Texture * background_texture3) {
+void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player,  letter_texture_t * letter, SDL_Texture * background_texture, SDL_Texture * background_texture2,  SDL_Texture * background_texture3, SDL_Texture * background_texture4) {
 
 
         printf("Destroying text input...\n");
@@ -145,16 +165,28 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
 
         printf("Destroying background texture 3...\n");
         SDL_DestroyTexture(background_texture3);
+
+        printf("Destroying background texture 4...\n");
+        SDL_DestroyTexture(background_texture4);
         
         
         printf("Destroying username font..\n");
         TTF_CloseFont(player->username_font);
 
         printf("Destroying bird texture...\n");
-        SDL_DestroyTexture(bird->bird_texture);
-
+        for(int i = 0; i<5; i++){
+            SDL_DestroyTexture(bird->bird_texture[i]);
+        }
         printf("Destroying bird texture 2...\n");
-        SDL_DestroyTexture(bird->bird_texture2);
+        for(int i = 0; i<3; i++){
+            SDL_DestroyTexture(bird->bird_texture2[i]);
+        }
+
+        printf("Destroying bird texture 4...\n");
+        for(int i = 0; i<2; i++){
+            SDL_DestroyTexture(bird->bird_texture4[i]);
+        }
+
 
         printf("Destroying bird texture 3...\n");
         SDL_DestroyTexture(bird->bird_texture3);
@@ -165,8 +197,10 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
             SDL_DestroyTexture(pipe[i].up_pipe_texture3);
             SDL_DestroyTexture(pipe[i].down_pipe_texture);
             SDL_DestroyTexture(pipe[i].down_pipe_texture3);
-             SDL_DestroyTexture(pipe[i].up_pipe_texture2);
+            SDL_DestroyTexture(pipe[i].up_pipe_texture2);
             SDL_DestroyTexture(pipe[i].down_pipe_texture2);
+            SDL_DestroyTexture(pipe[i].down_pipe_texture4);
+            SDL_DestroyTexture(pipe[i].down_pipe_texture4);
         }
         printf("Destroying score font..\n");
         TTF_CloseFont(player->score_font);

@@ -29,6 +29,9 @@ void init_bird(SDL_Renderer ** renderer, bird_t * bird){
 //Render the texture of the bird
 void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
     int alpha; // Alpha value for transparency
+    bird->frame++;
+    int i = (bird->frame / 10) % 3;
+    int t = (bird->frame / 10) % 5; //dsp lo saco
     float time = (float)(current_time_ms() % 1000) / 1000.0f; // Time in seconds for the sine wave
     SDL_Rect bird_shape = { bird->bird_x, bird->bird_y, bird->bird_width, bird->bird_height }; // fixed size 200x100
     if(bird->collided){ //If the bird has collided with a pipe
@@ -38,19 +41,20 @@ void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
         alpha = 255; // If the bird has not collided, it is fully opaque
     }
     if(bird->shape == 1){
-        SDL_SetTextureAlphaMod(bird->bird_texture, alpha);
+        SDL_SetTextureAlphaMod(bird->bird_texture[t], alpha);
         // Draw the bird as a rectangle
-        SDL_RenderCopyEx(*renderer, bird->bird_texture, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+        SDL_RenderCopyEx(*renderer, bird->bird_texture[t], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
     }else if(bird->shape == 2){
-        SDL_SetTextureAlphaMod(bird->bird_texture2, alpha);
-        // Draw the bird as a rectangle
-        SDL_RenderCopyEx(*renderer, bird->bird_texture2, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+        SDL_SetTextureAlphaMod(bird->bird_texture2[i], alpha);
+        SDL_RenderCopyEx(*renderer, bird->bird_texture2[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
     }else if(bird->shape ==3){
         SDL_SetTextureAlphaMod(bird->bird_texture3, alpha);
         // Draw the bird as a rectangle
         SDL_RenderCopyEx(*renderer, bird->bird_texture3, NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+    }else if(bird->shape == BIRD_4){
+        SDL_SetTextureAlphaMod(bird->bird_texture4[i], alpha);
+        SDL_RenderCopyEx(*renderer, bird->bird_texture4[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the 
     }
-
 }
 
 //Backend
@@ -58,16 +62,18 @@ void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
 static void bird_update(bird_t* bird, char c){
     switch (c) {
         case FLYING_BIRD: 
-    
             bird->velocity = -GRAVITY/3.0f; // Sets the velocity to a negative value to make the bird fly up
-            bird->acceleration = 0.0f; // It sets the acceleration to 0, so it doesn't fall immediately 
-            
+            bird->acceleration = 0.0f; // It sets the acceleration to 0, so it doesn't fall immediately
+            if(bird->frame >=40){
+                bird->frame = 0;
+            }
         case FALLING_BIRD:
             bird->acceleration += GRAVITY*0.05; //It adds a portion of the gravity to the acceleration everio 0.1 seconds 
             break;
         default:
             break; //ignores any other input
     }
+
 }
 
 static void flying_physics(bird_t * bird){

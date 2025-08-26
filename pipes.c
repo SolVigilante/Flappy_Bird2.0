@@ -54,6 +54,13 @@ void draw_pipes3(SDL_Renderer ** renderer, pipe_t * pipe){
         SDL_RenderCopy(*renderer, pipe->down_pipe_texture3, NULL, &down_pipe_shape);
 }
 
+void draw_pipes4(SDL_Renderer ** renderer, pipe_t * pipe){
+        SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; 
+        SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; 
+        SDL_RenderCopy(*renderer, pipe->up_pipe_texture4, NULL, &up_pipe_shape);
+        SDL_RenderCopy(*renderer, pipe->down_pipe_texture4, NULL, &down_pipe_shape);
+}
+
 //Backend
 // Main loop
 void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
@@ -66,6 +73,8 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
                         draw_pipes2(renderer, pipe+i);
                 else if(pipe->style== PIPE_STYLE3)
                         draw_pipes3(renderer, pipe+i);
+                else if(pipe->style== PIPE_STYLE4)
+                        draw_pipes4(renderer, pipe+i);
                 if((pipe+i)->d_pipe){
                         if((pipe+i)-> bounced == false){ //If the gap is too high
                                 (pipe+i)-> gap_height += 1; // Randomly change the gap height
