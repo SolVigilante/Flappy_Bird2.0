@@ -16,6 +16,8 @@
 #define CHOOSING_DIFFICULTY 1
 #define CHOOSING_SLOT 6
 #define CHOOSING_USERNAME 2
+#define SHOWING_TOP_SCORE 12
+#define SHOWING_TOP_5 13
 #define FIRST_KEY 3
 #define PLAYING 4
 #define RENAME 5
@@ -26,6 +28,8 @@
 #define STARTING 9
 #define RULES 10
 #define APPEARANCE 11
+#define TOP_10 10
+#define TOP_5 5
 
 
 //Struct
@@ -46,6 +50,10 @@ typedef struct {
     SDL_Texture* score_text_texture;
     int score;
 }player_t;
+typedef struct{
+    char name[MAX_USERNAME_LENGTH];
+    int score;
+}score_info_t;
 
 //logic constants
 #define EASY 'E'

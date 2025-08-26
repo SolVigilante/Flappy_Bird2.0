@@ -110,6 +110,8 @@ int main() {
                         player.status = RULES;
                     }else if(player.status == STARTING && event.key.keysym.sym == SDLK_3){
                         player.status = APPEARANCE;
+                    }else if(player.status == STARTING && event.key.keysym.sym == SDLK_1){
+                        player.status = SHOWING_TOP_SCORE;
                     }
 
                     if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_1){
@@ -131,6 +133,13 @@ int main() {
                     if(player.status == RULES && event.key.keysym.sym == SDLK_e){
                         player.status = STARTING;
                     }
+                    if(player.status == SHOWING_TOP_SCORE && event.key.keysym.sym == SDLK_e){
+                        player.status = STARTING;
+                    }
+                    if(player.status == SHOWING_TOP_5 && event.key.keysym.sym == SDLK_e){
+                        player.status = GAMEOVER;
+                    }
+
 
                     if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_1){
                         difficulty = EASY; //Sets the difficulty to easy
@@ -171,6 +180,10 @@ int main() {
                         player.status = STARTING; //Initial status is choosing username
                         difficulty = START_DIFFICULTY;
                         player.slot_info.rewrite = NO_REWRITE;
+                    }
+                    if (player.status==GAMEOVER && event.key.keysym.sym == SDLK_s) {
+                         print_score(&player, &renderer, TOP_5);
+                         player.status = SHOWING_TOP_5;
                     }
 
                     if(player.status == CHOOSING_USERNAME){
@@ -276,8 +289,8 @@ int main() {
                 render_centered_image(letter.pause_texture, 100, 360, &renderer);
 
             }else if(player.status == GAMEOVER){ //If the game is over
-                render_centered_image(letter.gameover_texture, 100, 360, &renderer); //360x100 gameover image
-        
+                render_centered_image(letter.gameover_texture, 122, 353, &renderer); //360x100 gameover image
+
             }else if(player.status == CHOOSING_DIFFICULTY){ //If the user is choosing a difficulty
                 render_centered_image(letter.choose_difficulty_texture, 200, 700, &renderer); //360x100 gameover image
                 
@@ -313,6 +326,10 @@ int main() {
                 }
                 render_centered_image(letter.choose_rename_texture, 95, 425, &renderer); //750x76 start image
 
+            }else if(player.status == SHOWING_TOP_SCORE){
+                print_score(&player, &renderer, TOP_10);
+            }else if(player.status == SHOWING_TOP_5){
+                print_score(&player, &renderer, TOP_5);
             }
             // Shows the result
             SDL_RenderPresent(renderer);
@@ -337,6 +354,9 @@ static void collision_logic(pipe_t* pipe, bird_t* bird, player_t* player, bool *
                     bird->last_collision_time = current_time_ms(); //Updates the time of the last collision
                 }
                 if(has_passed(bird, pipe+i)){
+                    if((pipe+i)->d_pipe){
+                        player->score++;
+                    } 
                     player->score++;
                     (pipe+i)->has_passed= true;
                     *inc_flag = false; //Resets the flag so the speed can be increased again
