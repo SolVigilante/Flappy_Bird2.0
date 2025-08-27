@@ -101,7 +101,7 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
         player->score_font = TTF_OpenFont("fonts/score_font.ttf", 100); // font size 50
         player->lives_texture = IMG_LoadTexture(*renderer, "image/3_lives.png");//Initialize bird image
     }
-    //Init letter textures
+    //Init letter texturesx
     letter_texture->start_texture = IMG_LoadTexture(*renderer, "image/start.png");//Initialize the image of "Press space to start"
     letter_texture->gameover_texture = IMG_LoadTexture(*renderer, "image/GAMEOVER.png");//Initialize the image of GAMEOVER
     letter_texture->speed_up_texture = IMG_LoadTexture(*renderer, "image/speed_up.png");//Initialize the image of "Speed Up!"

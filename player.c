@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "constants.h"
+#include "screen.h"
 
 //Initializes the lifes but in the future should initialize the playerś name and creates its own file
 void init_player(SDL_Renderer ** renderer, player_t * player){
@@ -36,15 +37,17 @@ void draw_score(SDL_Renderer ** renderer, player_t * player){
     sprintf(score_text, "%d", player->score); //makes the score string
 
     SDL_Color color = {0xC7, 0xA6, 0x24}; // yellow
+    //if(bird.shape == BIRD_2){
+        //SDL_Color color = {255, 105, 180, 255}; 
+    //}
 
     //Everytime the text is actualized we need to create the surface and modify the text texture
     SDL_Surface* text_surface = TTF_RenderText_Blended(player->score_font, score_text, color); // Creates the surface with the text
     player->score_text_texture = SDL_CreateTextureFromSurface(*renderer, text_surface);
     
-    SDL_FreeSurface(text_surface); // it is not needed anymore
+    //SDL_FreeSurface(text_surface); // it is not needed anymore
 
     //Creates a rectangular shape with the text width and height
     SDL_Rect dst_rect = {(SCREEN_WIDTH- text_surface->w)/2 , (SCREEN_HEIGHT - text_surface->h)/5, text_surface->w, text_surface->h};
     SDL_RenderCopy(*renderer, player->score_text_texture, NULL, &dst_rect);
-
 }

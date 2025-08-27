@@ -64,11 +64,15 @@ static void bird_update(bird_t* bird, char c){
         case FLYING_BIRD: 
             bird->velocity = -GRAVITY/3.0f; // Sets the velocity to a negative value to make the bird fly up
             bird->acceleration = 0.0f; // It sets the acceleration to 0, so it doesn't fall immediately
-            if(bird->frame >=40){
+            if(bird->frame >=5){
                 bird->frame = 0;
             }
         case FALLING_BIRD:
-            bird->acceleration += GRAVITY*0.05; //It adds a portion of the gravity to the acceleration everio 0.1 seconds 
+            if(bird->shape == BIRD_3){
+                bird->acceleration += GRAVITY*0.01;
+            }else{
+                bird->acceleration += GRAVITY*0.04; //It adds a portion of the gravity to the acceleration everio 0.1 seconds 
+            }
             break;
         default:
             break; //ignores any other input

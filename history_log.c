@@ -10,7 +10,7 @@ static int compar_score(const void* score1, const void* score2);
 
 void slot_name(player_t* player, SDL_Renderer ** renderer){
     FILE * file;
-    char names [3*MAX_USERNAME_LENGTH + 9]= "";
+    char names [3*MAX_USERNAME_LENGTH + 9]= ".";
     char player_name[MAX_USERNAME_LENGTH];
     char num [MAX_USERNAME_LENGTH + 16];
     SDL_Color color = {0xB8, 0x8F, 0x33, 255}; //Gold color for the text 

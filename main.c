@@ -49,17 +49,11 @@ int main() {
     //initialize the game
     //game_set(&bird, pipe, &player, &letter, HARD, &renderer);
 
-
     //Initialize the background image
     SDL_Texture* background_texture = IMG_LoadTexture(renderer, "image/background.jpg");
     SDL_Texture* background_texture2 = IMG_LoadTexture(renderer, "image/background2.jpg");
     SDL_Texture* background_texture3 = IMG_LoadTexture(renderer, "image/background3.jpg");
     SDL_Texture* background_texture4 = IMG_LoadTexture(renderer, "image/background4.png");
-    
-    
-
-
-
     
     //Main loop
     SDL_Event event; //Event variable
@@ -78,7 +72,6 @@ int main() {
     player.username[0] = '\0'; //Initialize the username to an empty string
     pipe->style = PIPE_STYLE1;
     bird.frame = 0;
-
 
     while(running) {
         while (SDL_PollEvent(&event)) {
@@ -126,17 +119,17 @@ int main() {
                     }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_5){
                         bird.shape = BIRD_4;
                         pipe->style = PIPE_STYLE4;
-                    }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_e){
+                    }else if(player.status == APPEARANCE && event.key.keysym.sym == SDLK_RETURN){
                         player.status = STARTING;
                     }
 
-                    if(player.status == RULES && event.key.keysym.sym == SDLK_e){
+                    if(player.status == RULES && event.key.keysym.sym == SDLK_RETURN){
                         player.status = STARTING;
                     }
-                    if(player.status == SHOWING_TOP_SCORE && event.key.keysym.sym == SDLK_e){
+                    if(player.status == SHOWING_TOP_SCORE && event.key.keysym.sym == SDLK_RETURN){
                         player.status = STARTING;
                     }
-                    if(player.status == SHOWING_TOP_5 && event.key.keysym.sym == SDLK_e){
+                    if(player.status == SHOWING_TOP_5 && event.key.keysym.sym == SDLK_RETURN){
                         player.status = GAMEOVER;
                     }
 
@@ -224,7 +217,6 @@ int main() {
             //Draw Background
             if(bird.shape == 1){
                 SDL_RenderCopy(renderer, background_texture, NULL, NULL);
-
             }
             else if (bird.shape == 2){
                 SDL_RenderCopy(renderer, background_texture2, NULL, NULL);
@@ -276,10 +268,10 @@ int main() {
 
             }else if(player.status== APPEARANCE){
                 render_centered_image(letter.appearance_texture, 200, 700, &renderer);
-                renderImage(bird.bird_texture[0], 50, 50, 1.5 , 2.55 , &renderer);
-                renderImage(bird.bird_texture2[0], 70, 70, 1.5 ,2, &renderer);
-                renderImage(bird.bird_texture3, 50, 50, 1.5 ,1.65 , &renderer);
-                renderImage(bird.bird_texture4 [0], 90, 80, 1.5 ,1.3 , &renderer);
+                renderImage(bird.bird_texture[0], 50, 50, 1.5 , 3, &renderer);
+                renderImage(bird.bird_texture2[0], 50, 50, 1.5 ,2.25, &renderer);
+                renderImage(bird.bird_texture3, 50, 50, 1.5 ,1.8, &renderer);
+                renderImage(bird.bird_texture4 [0], 60, 50, 1.5 ,1.5 , &renderer);
                 
 
             }else if(player.status== RULES){
