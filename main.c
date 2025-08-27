@@ -161,7 +161,7 @@ int main() {
                         player.slot_info.rewrite  = NO_REWRITE;
                     }
 
-                    if(event.key.keysym.sym == SDLK_TAB){
+                    if(player.status == PLAYING && event.key.keysym.sym == SDLK_TAB){
                         player.status = PAUSE; //chages the status of the player
                     }
                     if(player.status == PAUSE && event.key.keysym.sym == SDLK_c){

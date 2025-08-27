@@ -4,8 +4,12 @@ ines
 51
 SOL
 43
+ines
+38
 INE
 36
+ines
+31
 ines
 30
 sol
@@ -14,7 +18,3 @@ sol
 26
 ines
 23
-SOL
-22
-INE
-18
