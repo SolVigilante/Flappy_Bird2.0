@@ -113,8 +113,8 @@ typedef struct{
 typedef struct{
     SDL_Texture* bird_texture [5]; //Image for the bird texture
     SDL_Texture* bird_texture2 [3];
-    SDL_Texture* bird_texture3;
-     SDL_Texture* bird_texture4 [3];
+    SDL_Texture* bird_texture3[4];
+    SDL_Texture* bird_texture4 [3];
     int bird_height; 
     int bird_width;
     long long last_collision_time; //Last time the bird collided, initialized to a negative value so the first increment cant happen immediately

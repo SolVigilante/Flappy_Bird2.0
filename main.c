@@ -270,7 +270,7 @@ int main() {
                 render_centered_image(letter.appearance_texture, 200, 700, &renderer);
                 renderImage(bird.bird_texture[0], 50, 50, 1.5 , 3, &renderer);
                 renderImage(bird.bird_texture2[0], 50, 50, 1.5 ,2.25, &renderer);
-                renderImage(bird.bird_texture3, 50, 50, 1.5 ,1.8, &renderer);
+                renderImage(bird.bird_texture3[0], 50, 50, 1.5 ,1.8, &renderer);
                 renderImage(bird.bird_texture4 [0], 60, 50, 1.5 ,1.5 , &renderer);
                 
 

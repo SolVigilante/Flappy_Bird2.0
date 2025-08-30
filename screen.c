@@ -45,6 +45,11 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     bird->bird_texture [3]= IMG_LoadTexture(*renderer, "image/bird_midup.png");//Initialize bird imagee
     bird->bird_texture [4]= IMG_LoadTexture(*renderer, "image/bird_up.png");//Initialize bird image
 
+    bird->bird_texture3 [0]= IMG_LoadTexture(*renderer, "image/bird3.png");//Initialize bird image
+    bird->bird_texture3 [1]= IMG_LoadTexture(*renderer, "image/bird3_middown.png");//Initialize bird image
+    bird->bird_texture3 [2]= IMG_LoadTexture(*renderer, "image/bird3_mid.png");//Initialize bird imag
+    bird->bird_texture3 [3]= IMG_LoadTexture(*renderer, "image/bird3_midup.png");//Initialize bird imagee
+
     bird->bird_texture2[0]= IMG_LoadTexture(*renderer, "image/bird2.png");//Initialize bird image
     bird->bird_texture2[1]= IMG_LoadTexture(*renderer, "image/bird2_middle.png");
     bird->bird_texture2[2]= IMG_LoadTexture(*renderer, "image/bird2_up.png");
@@ -55,13 +60,13 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     for(int i = 0; i<5; i++){
         SDL_SetTextureBlendMode(bird->bird_texture[i], SDL_BLENDMODE_BLEND); //enables transparecy
     }
+    for(int i = 0; i<4; i++){
+        SDL_SetTextureBlendMode(bird->bird_texture3[i], SDL_BLENDMODE_BLEND); //enables transparecy
+    }
     for(int i =0; i<3; i++){
         SDL_SetTextureBlendMode(bird->bird_texture2[i], SDL_BLENDMODE_BLEND); //enables transparecy
         SDL_SetTextureBlendMode(bird->bird_texture4[i], SDL_BLENDMODE_BLEND); //enables transparecy
     }
-    
-    bird->bird_texture3= IMG_LoadTexture(*renderer, "image/bird3.png");//Initialize bird image
-    SDL_SetTextureBlendMode(bird->bird_texture3, SDL_BLENDMODE_BLEND); //enables transparecy
 
     //Init pipes textures
     for(int i=0; i<NUM_PIPES; i++){
@@ -187,9 +192,10 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
             SDL_DestroyTexture(bird->bird_texture4[i]);
         }
 
-
-        printf("Destroying bird texture 3...\n");
-        SDL_DestroyTexture(bird->bird_texture3);
+        printf("Destroying bird texture 3..\n");
+        for(int i = 0; i<4; i++){
+            SDL_DestroyTexture(bird->bird_texture3[i]);
+        }
 
         printf("Destroying pipes textures...\n");
         for (int i = 0; i < NUM_PIPES; i++) {
