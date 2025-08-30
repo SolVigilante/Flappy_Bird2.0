@@ -59,17 +59,17 @@ int main() {
     SDL_Event event; //Event variable
     bool running = true; //break flag
     bool inc_flag = false; //Flag to know if the speed has been increased
-    int difficulty = START_DIFFICULTY; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
     char txtinput[MAX_USERNAME_LENGTH]= ""; //Input variable for the user to choose a difficulty
     bool is_text_input_active = false; //Flag to know if the text input is active
 
     init_textures(pipe, &bird, &player,&letter, &renderer); //Initializes the textures of the game
     init_player(&renderer, &player); //Initializes the player
     player.status = CHOOSING_SLOT; //Initial status is choosing username
-    bird.shape = BIRD;
-    player.slot_info.slot = NULL;
     player.slot_info.rewrite = START_SLOT;
+    player.slot_info.slot = NULL;
     player.username[0] = '\0'; //Initialize the username to an empty string
+     player.difficulty = START_DIFFICULTY; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
+    bird.shape = BIRD;
     pipe->style = PIPE_STYLE1;
     bird.frame = 0;
 
@@ -135,13 +135,13 @@ int main() {
 
 
                     if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_1){
-                        difficulty = EASY; //Sets the difficulty to easy
+                        player.difficulty = EASY; //Sets the difficulty to easy
                     }
                     else if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_2){
-                        difficulty = MEDIUM; //Sets the difficulty to medium
+                        player.difficulty = MEDIUM; //Sets the difficulty to medium
                     }
                     else if(player.status == CHOOSING_DIFFICULTY && event.key.keysym.sym == SDLK_3){
-                        difficulty = HARD; //Sets the difficulty to hard
+                        player.difficulty = HARD; //Sets the difficulty to hard
                     }
 
                     if(player.status == CHOOSING_SLOT && event.key.keysym.sym == SDLK_1){
@@ -171,7 +171,6 @@ int main() {
                     if ((player.status==GAMEOVER || player.status == PAUSE) && event.key.keysym.sym == SDLK_r) {
                         init_player(&renderer, &player); //Reinitializes the player
                         player.status = STARTING; //Initial status is choosing username
-                        difficulty = START_DIFFICULTY;
                         player.slot_info.rewrite = NO_REWRITE;
                     }
                     if (player.status==GAMEOVER && event.key.keysym.sym == SDLK_s) {
@@ -282,14 +281,17 @@ int main() {
 
             }else if(player.status == GAMEOVER){ //If the game is over
                 render_centered_image(letter.gameover_texture, 122, 353, &renderer); //360x100 gameover image
+                if(player.new_high_score_flag){
+                    renderImage(letter.new_high_score_texture, 100, 400, 100.0, (double)(SCREEN_WIDTH-400)/2, &renderer);
+                }
 
             }else if(player.status == CHOOSING_DIFFICULTY){ //If the user is choosing a difficulty
                 render_centered_image(letter.choose_difficulty_texture, 200, 700, &renderer); //360x100 gameover image
                 
-                if(difficulty != START_DIFFICULTY){ //If the user has chosen a difficulty
+                if(player.difficulty != START_DIFFICULTY){ //If the user has chosen a difficulty
                     player.status = FIRST_KEY; 
                     
-                    game_set(&bird, pipe, &player, &letter, difficulty, &renderer); //Resets the game with the new difficulty
+                    game_set(&bird, pipe, &player, &letter, &renderer); //Resets the game with the new difficulty
                 }
             }else if(player.status == CHOOSING_SLOT){
                 if (player.slot_info.slot != NULL){
@@ -359,11 +361,15 @@ static void collision_logic(pipe_t* pipe, bird_t* bird, player_t* player, bool *
 static void speed_up_logic(pipe_t* pipe, player_t* player, bool *inc_flag, letter_texture_t* letter, SDL_Renderer** renderer) {
 /*Function that evaluates if the game should speed up because the player has passed 5 pipes. It also manages
 the logic for graphic part. */
-    if((player->score)%5 == 0 && player->score != 0 && pipe->speed < SPEED_LIMIT(HARD) && !*inc_flag){ //Increases the speed of the pipes every 5 points and top speed is 10
+
+    if((player->score) >= player->next_speed_up && player->score != 0 && pipe->speed < SPEED_LIMIT(player->difficulty) && !*inc_flag){ //Increases the speed of the pipes every 5 points and top speed is 10
         for(int i=0; i<NUM_PIPES; i++){
             (pipe+i)->speed++; //Increases the speed of the pipes every 5 frames
         }
         *inc_flag = true; //Sets the flag so the speed is not increased again
+        player->next_speed_up += player->step; //Sets the next score to increase the speed
+        player->step += 2; //Increases the step so the speed up is less frequent
+
         pipe->last_increment_time = current_time_ms(); //Updates the time of the last increment
     }
     long long now = current_time_ms();

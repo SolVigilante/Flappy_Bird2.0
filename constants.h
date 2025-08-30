@@ -49,6 +49,10 @@ typedef struct {
     SDL_Texture* enter_username_texture;
     SDL_Texture* score_text_texture;
     int score;
+    int difficulty;
+    int next_speed_up;
+    int step;
+    bool new_high_score_flag;
 }player_t;
 typedef struct{
     char name[MAX_USERNAME_LENGTH];
@@ -146,6 +150,7 @@ typedef struct{
     SDL_Texture * starting_texture;
     SDL_Texture * rules_texture;
     SDL_Texture * appearance_texture;
+    SDL_Texture * new_high_score_texture;
 }letter_texture_t;
 
 #endif // CONSTANTS_H

@@ -117,6 +117,7 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     letter_texture->starting_texture=IMG_LoadTexture(*renderer, "image/Flappy_bird.png");
     letter_texture->rules_texture=IMG_LoadTexture(*renderer, "image/Rules:Commands.png");
     letter_texture->appearance_texture=IMG_LoadTexture(*renderer, "image/appearance.png");
+    letter_texture->new_high_score_texture=IMG_LoadTexture(*renderer, "image/new_high_score.png");
 }
 // Function to clean up SDL resources
 //The flag has started is used to know wich resources to free. If tthe ame has stated for even once it will free all the resources. If no i will only free 
@@ -161,6 +162,9 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
 
         printf("Destroying appearance texture..\n");
         SDL_DestroyTexture(letter->appearance_texture);
+
+        printf("Destroying new high score texture..\n");
+        SDL_DestroyTexture(letter->new_high_score_texture);
 
         printf("Destroying background texture...\n");
         SDL_DestroyTexture(background_texture);
@@ -247,8 +251,10 @@ void render_centered_image(SDL_Texture* texture, int height, int width, SDL_Rend
     SDL_RenderCopy(*renderer, texture, NULL, &text_shape);
 }
 
+
+
 void renderImage(SDL_Texture* texture, int height, int width,double cord_y, double cord_x, SDL_Renderer** renderer){
-    SDL_Rect text_shape = { (SCREEN_WIDTH -width)/cord_x, (SCREEN_HEIGHT - height)/cord_y, width, height }; //Hearts at the left top corner with a fixed width and height
+    SDL_Rect text_shape = { cord_x, cord_y, width, height }; //Hearts at the left top corner with a fixed width and height
     // Draw the hearts as a rectangle
     SDL_SetRenderDrawColor(*renderer, 255, 255, 0, 255); 
     SDL_RenderCopy(*renderer, texture, NULL, &text_shape);

@@ -44,10 +44,10 @@ bool has_passed(bird_t * bird, pipe_t * pipe){
 }
 
 //Initialize all the structures
-void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * letter, int difficulty,  SDL_Renderer ** renderer){
+void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * letter,  SDL_Renderer ** renderer){
     static int i;
     for (i=NUM_PIPES; i>0; i--){
-        init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH), difficulty, false);
+        init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH), player->difficulty, false);
     }
     init_bird(renderer, bird);
 }

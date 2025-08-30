@@ -7,6 +7,10 @@
 //Initializes the lifes but in the future should initialize the playerś name and creates its own file
 void init_player(SDL_Renderer ** renderer, player_t * player){
     //Initialize the player
+    player->next_speed_up = 5; //Next score to increase the speed
+    player->step = 5; //Step variable to increase the speed up every 5 points
+    player->difficulty = START_DIFFICULTY; //Difficulty variable, initialized to -1 so the user has to choose a difficulty;
+    player->new_high_score_flag = false;
     player->score=0;
     player->lives=3;
     player->score_font = TTF_OpenFont("fonts/score_font.ttf", 100); // font size 50

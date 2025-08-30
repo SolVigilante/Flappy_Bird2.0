@@ -54,6 +54,7 @@ void write_history_log(player_t* player){
         file = fopen(player->slot_info.slot, "w");
         fprintf(file, "%s\n", player->username);
         fprintf(file, "%d\n", player->score);
+        player->new_high_score_flag = true;
     }else{
         file = fopen(player->slot_info.slot, "r+");
         //Reads the last 5 top scores and stores it in a buffer
@@ -90,6 +91,10 @@ void write_history_log(player_t* player){
 
         //Arranges from smallest to biggest
         qsort(buffer, count, sizeof(int), compar_desc);
+
+        if(player->score == buffer[0]){ //If the score is the highest it has already been saved in the file
+            player->new_high_score_flag = true;
+        }
         
         fclose(file);
         file = fopen(player->slot_info.slot, "w");
