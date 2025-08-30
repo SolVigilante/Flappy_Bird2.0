@@ -19,13 +19,13 @@ void slot_name(player_t* player, SDL_Renderer ** renderer){
     for(i=1; i<=3; i++){
             switch(i){
                 case 1:
-                    file = fopen("history_log/first_slot.txt", "a+");
+                    file = fopen("history_log/first_slot.txt", "r");
                     break;
                 case 2:
-                    file = fopen("history_log/second_slot.txt", "a+");
+                    file = fopen("history_log/second_slot.txt", "r");
                     break;
                 case 3:
-                    file = fopen("history_log/third_slot.txt", "a+");
+                    file = fopen("history_log/third_slot.txt", "r");
                     break;
             }
             if(file != NULL){

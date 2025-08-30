@@ -54,4 +54,5 @@ void draw_score(SDL_Renderer ** renderer, player_t * player){
     //Creates a rectangular shape with the text width and height
     SDL_Rect dst_rect = {(SCREEN_WIDTH- text_surface->w)/2 , (SCREEN_HEIGHT - text_surface->h)/5, text_surface->w, text_surface->h};
     SDL_RenderCopy(*renderer, player->score_text_texture, NULL, &dst_rect);
+    SDL_FreeSurface(text_surface); // it is not needed anymore
 }

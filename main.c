@@ -282,7 +282,7 @@ int main() {
             }else if(player.status == GAMEOVER){ //If the game is over
                 render_centered_image(letter.gameover_texture, 122, 353, &renderer); //360x100 gameover image
                 if(player.new_high_score_flag){
-                    renderImage(letter.new_high_score_texture, 100, 400, 100.0, (double)SCREEN_WIDTH/2, &renderer);
+                    renderImage(letter.new_high_score_texture, 100, 400, 3, 2, &renderer);
                 }
 
             }else if(player.status == CHOOSING_DIFFICULTY){ //If the user is choosing a difficulty
