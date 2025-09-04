@@ -259,6 +259,7 @@ int main() {
                 
                 if(player.lives <= 0){
                     player.status = GAMEOVER; //If the player has no lives left, the game is over
+                    write_TOP5(&player);
                     write_history_log(&player);
                 }
 

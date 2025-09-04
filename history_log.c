@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "history_log.h"
 #include "screen.h"
 #include "constants.h"
@@ -41,7 +42,21 @@ void slot_name(player_t* player, SDL_Renderer ** renderer){
     renderTextCentered(renderer, player->username_font, names, color);
 }
 
-void write_history_log(player_t* player){
+void write_history_log( player_t * player){
+    time_t t;               // struct for time in seconds
+    struct tm *info;        // sctruct width date and time info
+    time(&t); //Get the current time
+    info = localtime(&t); //Convert to local time
+
+    FILE* file;
+    file = fopen("history_log/History_log.txt", "a");
+    if(file != NULL){
+        fprintf(file, "%s %d %s", player->username, player->score, asctime(info)); //writes in the archive the username, score and date 
+        fclose(file);
+    }
+}
+
+void write_TOP5(player_t* player){
     FILE* file;
     int buffer[6];
     char text_score[MAX_SCORE];
