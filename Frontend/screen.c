@@ -2,9 +2,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
-#include <sys/time.h>  // gettimeofday
 #include "screen.h"
-#include "constants.h"
+#include "Backend/constants.h"
 
 //Function to initialize the screen
 //This function will set up the SDL window and renderer
@@ -233,16 +232,6 @@ void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe
         printf("Quiting SDL...\n");
         SDL_Quit();
 }
-
-
-
-// Function to get the current time in milliseconds
-long long current_time_ms(void) {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return (long long)(tv.tv_sec) * 1000 + (tv.tv_usec / 1000);
-}
-
 
 void render_centered_image(SDL_Texture* texture, int height, int width, SDL_Renderer** renderer){
     SDL_Rect text_shape = { (SCREEN_WIDTH -width)/2, (SCREEN_HEIGHT - height)/2, width, height }; //Hearts at the left top corner with a fixed width and height

@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "constants.h"
+#include "Backend/constants.h"
 
 //Function to initialize the screen
 //This function will set up the SDL window and renderer
@@ -12,7 +12,6 @@
 int init_screen (SDL_Window** window, SDL_Renderer** renderer);
 // Function to clean up SDL resources
 void kill_SDL (SDL_Window** window, SDL_Renderer** renderer, bird_t * bird, pipe_t *pipe, player_t * player, letter_texture_t * letter, SDL_Texture * background_texture, SDL_Texture * background_texture2, SDL_Texture * background_texture3, SDL_Texture * background_texture4);
-long long current_time_ms(void);
 void render_centered_image(SDL_Texture* texture, int height, int width, SDL_Renderer** renderer);
 void renderImage(SDL_Texture* texture, int height, int width, double cord_y, double cord_x, SDL_Renderer** renderer);
 int renderTextCentered(SDL_Renderer **renderer, TTF_Font *font, const char *text, SDL_Color color);

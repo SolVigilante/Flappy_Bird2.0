@@ -7,13 +7,18 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "screen.h"
-#include "pipes.h"
-#include "bird.h"
-#include "logic.h"
-#include "player.h"
-#include "history_log.h"
-#include "constants.h"
+#include "Frontend/screen.h"
+#include "Backend/pipes.h"
+#include "Frontend/pipes_front.h"
+#include "Frontend/bird_front.h"
+#include "Backend/bird.h"
+#include "Backend/logic.h"
+#include "Backend/player.h"
+#include "Frontend/player_front.h"
+#include "Backend/history_log.h"
+#include "Frontend/history_log_front.h"
+#include "Backend/constants.h"
+#include "Backend/time.h"
 
 static void collision_logic(pipe_t* pipe, bird_t* bird, player_t* player, bool *inc_flag, SDL_Renderer** renderer    );
 static void speed_up_logic(pipe_t* pipe, player_t* player, bool *inc_flag, letter_texture_t* letter, SDL_Renderer** renderer);
@@ -91,7 +96,7 @@ int main() {
                             case FIRST_KEY:
                                 player.status = PLAYING; //Changes the status to playing
                             case PLAYING:
-                                game_start(FLYING_BIRD, &bird); //updates birds physics for flying
+                                bird_start(FLYING_BIRD, &bird); //updates birds physics for flying
                                 bird.space_pressed = true; 
                                 break;
                         }
@@ -386,7 +391,7 @@ static void update_bird(bird_t* bird, player_t* player) {
         bird->collided = false; //Resets the collision flag after 3 seconds
     }
     if((now - bird->last_gravity_time >= 100) && player->status != FIRST_KEY) { // Every 100ms, we update the bird's physics only if the firstt key has been pressed
-        game_start(FALLING_BIRD, bird); // Starts the game loop
+        bird_start(FALLING_BIRD, bird); // Starts the game loop
         bird->last_gravity_time = now;  // Updates the last time gravity was applied
     }
 }

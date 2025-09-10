@@ -4,7 +4,6 @@
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
 #include "constants.h"
-void draw_bird(SDL_Renderer ** renderer, bird_t * bird); //draws bird
 void init_bird(SDL_Renderer ** renderer, bird_t * bird);//initializes the bird
-void game_start(char c, bird_t* bird); // Function to start the game loop
+void bird_start(char c, bird_t* bird); // Function to start the game loop
 #endif // BIRD_H

@@ -18,7 +18,3 @@ SOL
 39
 ines
 38
-INE
-36
-sol
-35

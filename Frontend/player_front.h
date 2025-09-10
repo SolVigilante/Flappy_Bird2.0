@@ -1,14 +1,12 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef PLAYER_FRONT_H
+#define PLAYER_FRONT_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "constants.h"
+#include "Backend/constants.h"
+#include "screen.h"
 
-
-void init_player(SDL_Renderer ** renderer, player_t * player);
-void update_lives(SDL_Renderer ** renderer, player_t * player);
 void draw_lives(SDL_Renderer ** renderer, player_t * player);
 void draw_score(SDL_Renderer ** renderer, player_t * player);
 
-#endif
+#endif//PLAYER_FRONT_H

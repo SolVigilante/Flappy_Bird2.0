@@ -1,9 +1,10 @@
 #include <stdbool.h>
-#include "bird.h"
+#include "Backend/bird.h"
 #include "pipes.h"
-#include "screen.h"
+#include "Frontend/screen.h"
 #include "logic.h"
 #include "player.h"
+#include "time.h"
 #include "constants.h"
 
 
