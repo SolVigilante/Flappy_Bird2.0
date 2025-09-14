@@ -5,7 +5,8 @@
 #include "Backend/time.h"
 
 //Render the texture of the bird
-void draw_bird(SDL_Renderer** renderer, bird_t* bird) {//Function that draws the bird, it recieves a bird pointer
+void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
+//Function that draws the bird, it recieves a bird pointer
     int alpha; // Alpha value for transparency
     bird->frame++;
     int i = (bird->frame / 10) % 3;

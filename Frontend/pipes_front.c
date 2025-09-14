@@ -4,7 +4,8 @@
 #include "pipes_front.h"
 #include "Backend/constants.h"
 
-void draw_pipes(SDL_Renderer ** renderer, pipe_t * pipe){ //Creates the graphics for Pipe 1, it recieves a pointer type pipe
+void draw_pipes(SDL_Renderer ** renderer, pipe_t * pipe){ 
+//Creates the graphics for Pipe 1, it recieves a pointer type pipe
         SDL_Rect down_pipe_shape = { pipe->position, pipe->gap_height + PIPES_GAP, pipe->width, SCREEN_HEIGHT-pipe->gap_height-PIPES_GAP}; //starts texture for the bottom pipe 1
         SDL_Rect up_pipe_shape = { pipe->position, 0, pipe->width, pipe->gap_height}; //starts texture for the top pipe 1
         SDL_RenderCopy(*renderer, pipe->up_pipe_texture, NULL, &up_pipe_shape);

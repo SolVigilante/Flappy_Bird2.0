@@ -4,7 +4,8 @@
 #include <SDL2/SDL_ttf.h>
 #include "Backend/constants.h"
 
-void draw_lives (SDL_Renderer ** renderer, player_t * player){//Function that draws lives, it recieves a pointer to player and a renderer
+void draw_lives (SDL_Renderer ** renderer, player_t * player){
+//Function that draws lives, it recieves a pointer to player and a renderer
     SDL_Rect heart_shape = { 5, 5, HEART_WIDTH, HEART_HEIGHT }; //Hearts at the left top corner with a fixed width and height
     // Draw the hearts as a rectangle
     SDL_SetRenderDrawColor(*renderer, 255, 255, 0, 255); 
