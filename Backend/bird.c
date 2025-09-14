@@ -13,6 +13,8 @@ static void flying_physics(bird_t * bird);
 
 //Initializes the bird
 void init_bird(SDL_Renderer ** renderer, bird_t * bird){
+/*Function that receives the renderer and the bird and initialize the bird's constants such as 
+the image height, width, the gravity, acceleration, etc. It doesn't return anything. */
     bird->bird_height = BIRD_HEIGHT;
     bird->bird_width = BIRD_WIDTH;
     bird->bird_x = SCREEN_WIDTH / 5; // The bird will be at 1/5 of the screen
@@ -24,9 +26,10 @@ void init_bird(SDL_Renderer ** renderer, bird_t * bird){
     bird->collided = false;
 }
 
-//Backend
 
 static void bird_update(bird_t* bird, char c){
+/*Function that receives a pointer to the bird structure and a character that indicates whether
+the bird is falling or is flying. It doesn' return anything*/
     switch (c) {
         case FLYING_BIRD: 
             bird->velocity = -GRAVITY/3.0f; // Sets the velocity to a negative value to make the bird fly up
@@ -48,6 +51,8 @@ static void bird_update(bird_t* bird, char c){
 }
 
 static void flying_physics(bird_t * bird){
+/*Function that receives a pointer to the bird strucure and updates the bird's physics. It doesn't
+return anything*/
     if(bird->acceleration > GRAVITY){
             bird->acceleration = GRAVITY; // Limit the acceleration to the gravity
         }
@@ -62,6 +67,8 @@ static void flying_physics(bird_t * bird){
 }
 
 void bird_start(char c, bird_t* bird) { 
+/*Function that receives a character that indicates wheher th ebird is flying or fallin and a pointer
+to the bird strucure. It doesn't return anything.*/
     flying_physics(bird); 
     bird_update(bird, c); // Updates the bird's state based on input
 }

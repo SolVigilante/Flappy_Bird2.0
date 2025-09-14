@@ -8,6 +8,10 @@
 static void move_pipe (pipe_t *pipe, int pipes_left, int difficulty);
 
 void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
+/*Function that receives a pointer to the pipe structure, the position where the pipe will be
+initialized, the difficulty of the game and a boolean that indicates whether the pipe is being
+initialized or updated. It doesn't return anything.*/
+
         switch ((int)update){
                 case false: //If the pipe is being updated
                         if(difficulty == MEDIUM){
@@ -35,6 +39,8 @@ void init_pipes ( pipe_t * pipe, int pos, int difficulty, bool update){
 
 // Main loop
 void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
+/*Function that receives a pointer to the renderer, the pipes and an integrer that indicates the difficulty.
+It updates the position of the pipes. I doesn't return anything.*/
         int i;
         for(i = 0; i<NUM_PIPES; i++){
                 move_pipe(pipe+i, NUM_PIPES-i-1,difficulty ); //Moves pipe 
@@ -77,6 +83,9 @@ void pipes_movement(SDL_Renderer** renderer, pipe_t *pipe, int difficulty) {
 }
 //Moves pipe
 static void move_pipe (pipe_t *pipe, int pipes_left, int difficulty) {
+/*Function that receives a pointer to the pipe structure, the number of pipes left and the difficulty
+of the game. It doesn't return anything.*/
+
         pipe->position -= pipe->speed; // Move pipe one column to the left
         if(pipe->position < -pipe->width){ //If the pipe is out of the screen
                 if(pipes_left == NUM_PIPES-1){

@@ -6,6 +6,8 @@
 
 //Initializes the lifes but in the future should initialize the playerś name and creates its own file
 void init_player(SDL_Renderer ** renderer, player_t * player){
+/*Function that receives a pointer to the renderer and a pointer to the player's structure. Ot initializes the
+player and doesn'tt return anything.*/
     //Initialize the player
     player->next_speed_up = 5; //Next score to increase the speed
     player->step = 5; //Step variable to increase the speed up every 5 points

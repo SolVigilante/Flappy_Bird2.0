@@ -10,6 +10,8 @@ static int compar_desc(const void* el1, const void* el2);
 static int compar_score(const void* score1, const void* score2);
 
 void slot_name(player_t* player, SDL_Renderer ** renderer){
+/*Function thatt receives a pointer to the player and a pointer to the renderer. It gets the three
+usernames of the three memory slots. It prints the three usernames in the screen. It doesn't return anything.*/
     FILE * file;
     char names [3*MAX_USERNAME_LENGTH + 9]= "";
     char player_name[MAX_USERNAME_LENGTH];
@@ -18,7 +20,7 @@ void slot_name(player_t* player, SDL_Renderer ** renderer){
     int i;
 
     for(i=1; i<=3; i++){
-            switch(i){
+            switch(i){ //Opens the three files
                 case 1:
                     file = fopen("history_log/first_slot.txt", "r");
                     break;
@@ -29,7 +31,7 @@ void slot_name(player_t* player, SDL_Renderer ** renderer){
                     file = fopen("history_log/third_slot.txt", "r");
                     break;
             }
-            if(file != NULL){
+            if(file != NULL){ // it passes the usernamename of the file to a string
                 if(fgets(player_name, sizeof(player_name),file)!=NULL){
                     sprintf(num,"%d:", i);
                     strncat(names, num, sizeof(names)-1);
@@ -43,6 +45,8 @@ void slot_name(player_t* player, SDL_Renderer ** renderer){
 }
 
 void write_history_log( player_t * player){
+/*Function that receives a pointer to the player structure and writes the history log with the player's
+username, the score and the time. It doesn't return anything.*/
     time_t t;               // struct for time in seconds
     struct tm *info;        // sctruct width date and time info
     time(&t); //Get the current time
@@ -57,6 +61,8 @@ void write_history_log( player_t * player){
 }
 
 void write_TOP5(player_t* player){
+/*Function that receives a pointer to the player's strucure. It organizes the top 5 personal bes scores
+It doesn't resturn anything. */
     FILE* file;
     int buffer[6];
     char text_score[MAX_SCORE];
@@ -126,6 +132,8 @@ void write_TOP5(player_t* player){
 }
 
 void top10_scores (player_t * player){
+/*Function that receives a pointer to the player structure and organizes the top 10 scores of all
+the players. It doesn't return anything.*/
     FILE * file;
     bool rep_flag = false;
     int i, j, k;
@@ -173,7 +181,7 @@ void top10_scores (player_t * player){
     file = fopen("history_log/Top_10.txt", "w");
 
     if(file != NULL){
-        for(i=0; i<10; i++){
+        for(i=0; i<10; i++){ //Writes the 10 highest scores in the file
             fprintf(file, "%s\n", (score_info+i)->name);
             fprintf(file, "%d\n", (score_info+i)->score);
         }
@@ -182,17 +190,24 @@ void top10_scores (player_t * player){
 }
 
 static int compar_score(const void* score1, const void* score2){
+/*Function that receives two pointers to score_info structures and compares the scores. It returns
+1 if the first score is less than the second, -1 if the first score is greater than the second and 0 if they are equal.*/
     int score_1 = ((score_info_t *)score1)->score;
     int score_2 = ((score_info_t *)score2)->score;
     
-    if (score_1 < score_2) return 1;   // para orden descendente
+    if (score_1 < score_2) return 1;   // descending order
     if (score_1 > score_2) return -1;
     return 0;
 }
 static int compar_desc(const void* el1, const void* el2){
+/*Function that receives two pointers to integers and compares them. It returns the difference between
+the second and the first to sort in descending order.*/
+
     return *(int*)el2- *(int*)el1;
 }
 void get_username(player_t *player){
+/*Function that receives a pointer to the player structure and gets the username of the player
+from the corresponding memory slot. It doesn't return anything.*/
     FILE * file;
     file = fopen(player->slot_info.slot, "r+");
     fgets(player->username, sizeof(player->username), file);

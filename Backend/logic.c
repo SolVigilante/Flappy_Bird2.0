@@ -8,8 +8,11 @@
 #include "constants.h"
 
 
-//Function that returns true if the bird has collided with he pipe or false if it hasnt
+
 bool has_collide(bird_t* bird, pipe_t* pipe) {
+/*Function that returns true if the bird has collided with he pipe or false if it hasnt. It receives
+a pointer to the bird structure and a pointer to the pipe strucure.*/
+
     if(bird->collided){ //If the bird has alredy collided that pipe the score shouldn't increment
         return false;
     }else if((bird->bird_y == SCREEN_HEIGHT- BIRD_HEIGHT )&& !bird->floor_collision){ //If the bird is on the groundS
@@ -30,8 +33,10 @@ bool has_collide(bird_t* bird, pipe_t* pipe) {
 
 }
 
-//Function ttha returns true if the bird has just passed the pipe
+
 bool has_passed(bird_t * bird, pipe_t * pipe){
+/*Function ttha returns true if the bird has just passed the pipe. It receives a pointer to the bird
+structure and a pointer to the pipe structure.*/
     if(pipe->has_passed){ //If the bird has alredy passed that pipe the score shouldn't increment
         return false;
     }else{
@@ -46,6 +51,10 @@ bool has_passed(bird_t * bird, pipe_t * pipe){
 
 //Initialize all the structures
 void game_set(bird_t*bird , pipe_t* pipe, player_t * player, letter_texture_t * letter,  SDL_Renderer ** renderer){
+/*Function that initialize all the structures. It receives a pointer to the bird structure,
+to the pipe struture, to the player structure, tto the letter texture structture and to the renderer.
+It doesn't return anything. */
+    
     static int i;
     for (i=NUM_PIPES; i>0; i--){
         init_pipes( pipe+i-1, SCREEN_WIDTH + i*(GAP_PWP + PIPES_WIDTH), player->difficulty, false);
