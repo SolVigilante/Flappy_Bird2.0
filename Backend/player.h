@@ -7,6 +7,5 @@
 
 
 void init_player(SDL_Renderer ** renderer, player_t * player);
-void update_lives(SDL_Renderer ** renderer, player_t * player);
 
 #endif//PLAYER_H

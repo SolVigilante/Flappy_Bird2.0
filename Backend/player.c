@@ -17,14 +17,3 @@ void init_player(SDL_Renderer ** renderer, player_t * player){
     player->lives_texture = IMG_LoadTexture(*renderer, "image/3_lives.png");//Initialize bird image
 }
     
-
-
-void update_lives(SDL_Renderer ** renderer, player_t * player){
-    if (player->lives == 2){
-        player->lives_texture = IMG_LoadTexture(*renderer, "image/2_lives.png");//Bird image changes to the one with 2 hearts
-    }else if(player->lives == 1){
-        player->lives_texture = IMG_LoadTexture(*renderer, "image/1_live.png");//Bird image changes to the one with 1 heart
-    }else if(player->lives <= 0){
-         player->lives_texture = IMG_LoadTexture(*renderer, "image/0_lives.png");//Bird image changes to the one with 0 hearts
-    }
-}

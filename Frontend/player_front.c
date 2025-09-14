@@ -31,3 +31,13 @@ void draw_score(SDL_Renderer ** renderer, player_t * player){
     SDL_RenderCopy(*renderer, player->score_text_texture, NULL, &dst_rect);
     SDL_FreeSurface(text_surface); // it is not needed anymore
 }
+
+void update_lives(SDL_Renderer ** renderer, player_t * player){
+    if (player->lives == 2){
+        player->lives_texture = IMG_LoadTexture(*renderer, "image/2_lives.png");//Bird image changes to the one with 2 hearts
+    }else if(player->lives == 1){
+        player->lives_texture = IMG_LoadTexture(*renderer, "image/1_live.png");//Bird image changes to the one with 1 heart
+    }else if(player->lives <= 0){
+         player->lives_texture = IMG_LoadTexture(*renderer, "image/0_lives.png");//Bird image changes to the one with 0 hearts
+    }
+}
