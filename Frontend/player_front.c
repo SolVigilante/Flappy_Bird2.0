@@ -4,14 +4,14 @@
 #include <SDL2/SDL_ttf.h>
 #include "Backend/constants.h"
 
-void draw_lives (SDL_Renderer ** renderer, player_t * player){
+void draw_lives (SDL_Renderer ** renderer, player_t * player){//Function that draws lives, it recieves a pointer to player and a renderer
     SDL_Rect heart_shape = { 5, 5, HEART_WIDTH, HEART_HEIGHT }; //Hearts at the left top corner with a fixed width and height
     // Draw the hearts as a rectangle
     SDL_SetRenderDrawColor(*renderer, 255, 255, 0, 255); 
     SDL_RenderCopy(*renderer, player->lives_texture, NULL, &heart_shape);
 }
 
-void draw_score(SDL_Renderer ** renderer, player_t * player){
+void draw_score(SDL_Renderer ** renderer, player_t * player){//Function that draws scores, it recieves a pointer to player and a renderer
     static char score_text [MAX_SCORE]; //Max score: a hundred nines
     sprintf(score_text, "%d", player->score); //makes the score string
 
@@ -30,7 +30,7 @@ void draw_score(SDL_Renderer ** renderer, player_t * player){
     SDL_FreeSurface(text_surface); // it is not needed anymore
 }
 
-void update_lives(SDL_Renderer ** renderer, player_t * player){
+void update_lives(SDL_Renderer ** renderer, player_t * player){//Function that updates lives, it recieves a pointer to player and a renderer
     if (player->lives == 2){
         player->lives_texture = IMG_LoadTexture(*renderer, "image/2_lives.png");//Bird image changes to the one with 2 hearts
     }else if(player->lives == 1){

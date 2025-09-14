@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "Backend/constants.h"
 
-void print_score(player_t* player, SDL_Renderer** renderer, int top){//Function to display the score
+void print_score(player_t* player, SDL_Renderer** renderer, int top){//Function to display the score, it recieves a type player pointer and an int variable
     FILE * file;
     int err = 0; 
     int y; //Initial vertical position
