@@ -23,8 +23,6 @@ void draw_score(SDL_Renderer ** renderer, player_t * player){
     //Everytime the text is actualized we need to create the surface and modify the text texture
     SDL_Surface* text_surface = TTF_RenderText_Blended(player->score_font, score_text, color); // Creates the surface with the text
     player->score_text_texture = SDL_CreateTextureFromSurface(*renderer, text_surface);
-    
-    //SDL_FreeSurface(text_surface); // it is not needed anymore
 
     //Creates a rectangular shape with the text width and height
     SDL_Rect dst_rect = {(SCREEN_WIDTH- text_surface->w)/2 , (SCREEN_HEIGHT - text_surface->h)/5, text_surface->w, text_surface->h};

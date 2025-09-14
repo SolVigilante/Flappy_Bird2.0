@@ -21,16 +21,16 @@ void draw_bird(SDL_Renderer** renderer, bird_t* bird) {
     if(bird->shape == 1){
         SDL_SetTextureAlphaMod(bird->bird_texture[t], alpha);
         // Draw the bird as a rectangle
-        SDL_RenderCopyEx(*renderer, bird->bird_texture[t], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+        SDL_RenderCopyEx(*renderer, bird->bird_texture[t], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird1
     }else if(bird->shape == 2){
         SDL_SetTextureAlphaMod(bird->bird_texture2[i], alpha);
-        SDL_RenderCopyEx(*renderer, bird->bird_texture2[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+        SDL_RenderCopyEx(*renderer, bird->bird_texture2[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird2
     }else if(bird->shape ==3){
         SDL_SetTextureAlphaMod(bird->bird_texture3[i], alpha);
-        SDL_RenderCopyEx(*renderer, bird->bird_texture3[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird
+        SDL_RenderCopyEx(*renderer, bird->bird_texture3[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird3
     
     }else if(bird->shape == BIRD_4){
         SDL_SetTextureAlphaMod(bird->bird_texture4[i], alpha);
-        SDL_RenderCopyEx(*renderer, bird->bird_texture4[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the 
+        SDL_RenderCopyEx(*renderer, bird->bird_texture4[i], NULL, &bird_shape, bird->velocity*0.5f, NULL, SDL_FLIP_NONE); //Enables the physics of the bird4
     }
 }

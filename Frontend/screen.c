@@ -46,16 +46,16 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
 
     bird->bird_texture3 [0]= IMG_LoadTexture(*renderer, "image/bird3.png");//Initialize bird image
     bird->bird_texture3 [1]= IMG_LoadTexture(*renderer, "image/bird3_middown.png");//Initialize bird image
-    bird->bird_texture3 [2]= IMG_LoadTexture(*renderer, "image/bird3_mid.png");//Initialize bird imag
+    bird->bird_texture3 [2]= IMG_LoadTexture(*renderer, "image/bird3_mid.png");//Initialize bird image
     bird->bird_texture3 [3]= IMG_LoadTexture(*renderer, "image/bird3_midup.png");//Initialize bird imagee
 
     bird->bird_texture2[0]= IMG_LoadTexture(*renderer, "image/bird2.png");//Initialize bird image
-    bird->bird_texture2[1]= IMG_LoadTexture(*renderer, "image/bird2_middle.png");
-    bird->bird_texture2[2]= IMG_LoadTexture(*renderer, "image/bird2_up.png");
+    bird->bird_texture2[1]= IMG_LoadTexture(*renderer, "image/bird2_middle.png");//Initialize bird image
+    bird->bird_texture2[2]= IMG_LoadTexture(*renderer, "image/bird2_up.png");//Initialize bird image
 
-    bird->bird_texture4[0] = IMG_LoadTexture(*renderer, "image/bird4.png");
-    bird->bird_texture4[1] = IMG_LoadTexture(*renderer, "image/bird4_mid.png");
-    bird->bird_texture4[2] = IMG_LoadTexture(*renderer, "image/bird4_up.png");
+    bird->bird_texture4[0] = IMG_LoadTexture(*renderer, "image/bird4.png");//Initialize bird image
+    bird->bird_texture4[1] = IMG_LoadTexture(*renderer, "image/bird4_mid.png");//Initialize bird image
+    bird->bird_texture4[2] = IMG_LoadTexture(*renderer, "image/bird4_up.png");//Initialize bird image
     for(int i = 0; i<5; i++){
         SDL_SetTextureBlendMode(bird->bird_texture[i], SDL_BLENDMODE_BLEND); //enables transparecy
     }
@@ -110,13 +110,13 @@ void init_textures(pipe_t* pipe, bird_t * bird, player_t * player,letter_texture
     letter_texture->gameover_texture = IMG_LoadTexture(*renderer, "image/GAMEOVER.png");//Initialize the image of GAMEOVER
     letter_texture->speed_up_texture = IMG_LoadTexture(*renderer, "image/speed_up.png");//Initialize the image of "Speed Up!"
     letter_texture->choose_difficulty_texture = IMG_LoadTexture(*renderer, "image/difficulty.png");//Initialize the image of "Choose Difficulty"
-    letter_texture->choose_slot_texture = IMG_LoadTexture(*renderer, "image/memory_slot.png");
-    letter_texture->choose_rename_texture = IMG_LoadTexture (*renderer, "image/rename_texture.png");
-    letter_texture->pause_texture= IMG_LoadTexture(*renderer, "image/Pause.png");
-    letter_texture->starting_texture=IMG_LoadTexture(*renderer, "image/Flappy_bird.png");
-    letter_texture->rules_texture=IMG_LoadTexture(*renderer, "image/Rules:Commands.png");
-    letter_texture->appearance_texture=IMG_LoadTexture(*renderer, "image/appearance.png");
-    letter_texture->new_high_score_texture=IMG_LoadTexture(*renderer, "image/new_high_score.png");
+    letter_texture->choose_slot_texture = IMG_LoadTexture(*renderer, "image/memory_slot.png");//Initialize the image of "Memor slot"
+    letter_texture->choose_rename_texture = IMG_LoadTexture (*renderer, "image/rename_texture.png");//Initialize the image of "Choose username"
+    letter_texture->pause_texture= IMG_LoadTexture(*renderer, "image/Pause.png");//Initialize the image of "Pause"
+    letter_texture->starting_texture=IMG_LoadTexture(*renderer, "image/Flappy_bird.png");//Initialize the image of "Start"
+    letter_texture->rules_texture=IMG_LoadTexture(*renderer, "image/Rules:Commands.png");//Initialize the image of "Rules and Commands"
+    letter_texture->appearance_texture=IMG_LoadTexture(*renderer, "image/appearance.png");//Initialize the image of "Choose Appearance"
+    letter_texture->new_high_score_texture=IMG_LoadTexture(*renderer, "image/new_high_score.png");//Initialize the image of "New high score"
 }
 // Function to clean up SDL resources
 //The flag has started is used to know wich resources to free. If tthe ame has stated for even once it will free all the resources. If no i will only free 

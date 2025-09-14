@@ -6,22 +6,22 @@
 #include <stdlib.h>
 #include "Backend/constants.h"
 
-void print_score(player_t* player, SDL_Renderer** renderer, int top){
+void print_score(player_t* player, SDL_Renderer** renderer, int top){//Function to display the score
     FILE * file;
     int err = 0; 
     int y; //Initial vertical position
     char line[MAX_SCORE]= "";
     
-    if(top == TOP_5){
-        file = fopen(player->slot_info.slot, "r");
+    if(top == TOP_5){//If the player opens the top 5  scores
+        file = fopen(player->slot_info.slot, "r"); //opens file with top scores
         if(file == NULL){
-            printf("Error opening file\n");
+            printf("Error opening file\n");//
             err = 1;
         }else{
             strcpy(line, "TOP PERSONAL SCORES");
             y = SCREEN_HEIGHT / 2 -10;
         }
-    }else if(top == TOP_10){
+    }else if(top == TOP_10){//If the player opens the top 10 scores
         file = fopen("history_log/Top_10.txt", "r");
         if(file == NULL){
             printf("Error opening file\n");
